@@ -205,5 +205,5 @@ listRecord = [
     {"EMPLOYEE_ID": 4, "STATUS": ""},
 ]
 
-
+Anime-style school scene, a shy student with gray tousled hair sits quietly with a book, almost blending into the background
 */
