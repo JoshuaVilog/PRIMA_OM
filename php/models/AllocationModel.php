@@ -18,7 +18,20 @@ class AllocationModel {
 
         return $records;
     }
+    public static function GetAttendanceRecord($id){
+        $db = DB::connectionODAS();
+        $sql = "SELECT `RID`, `OPERATOR`, `DATE`, `SHIFT`, `ATTENDANCE_STATUS`, `CREATED_AT`, `CREATED_BY` FROM `attendance_masterlist` WHERE RID = $id";
+        $result = $db->query($sql);
 
+        if(mysqli_num_rows($result) == 0){
+            return null;
+        } else {
+            $row = mysqli_fetch_assoc($result);
+
+            return $row;
+        }
+
+    }
     public static function InsertAttendance($records){
         $db = DB::connectionODAS();
         $userCode = $_SESSION['USER_CODE'];
@@ -85,7 +98,7 @@ class AllocationModel {
         )";
         return $db->query($sql);
     }
-    public static function GetAllocationID($attendanceID){
+    public static function GetAllocationByAttendanceID($attendanceID){
         $db = DB::connectionODAS();
 
         $sql = "SELECT RID FROM `allocation_masterlist` WHERE ATTENDANCE_ID = '$attendanceID' AND OUT_DATETIME IS NULL";

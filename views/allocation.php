@@ -78,10 +78,11 @@
             $("#txtDisplayOperatorName").val(main.SetEmployeeName(operatorID));
             $("#modalTitleAllocation").text("SET STATUS");
         });
-        $("#table-records").on("click", ".btnTransfer", function(){
+        $("#table-records").on("click", ".btnModify", function(){
             let id = $(this).val();
 
             // console.log(id);
+            allocation.GetAttendanceRecord(id);
             $("#modalAllocation").modal("show");
         });
 

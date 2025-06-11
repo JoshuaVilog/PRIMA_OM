@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $record->attttendanceID = $attendanceID;
         $record->remarks = $remarks;
 
-        $allocationID = $record::GetAllocationID($attendanceID);
+        $allocationID = $record::GetAllocationByAttendanceID($attendanceID);
 
         if($allocationID != NULL){
 

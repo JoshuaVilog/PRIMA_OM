@@ -161,6 +161,25 @@ class Allocation extends Main{
             });
         }
     }
+
+    GetAttendanceRecord(attendanceID){
+        $.ajax({
+            url: "php/controllers/Allocation/GetAttendanceByRID.php",
+            method: "POST",
+            data: {
+                id:attendanceID,
+            },
+            datatype: "json",
+            success: function(response){
+                console.log(response);
+
+            },
+            error: function(err){
+                console.log("Error:"+JSON.stringify(err));
+            },
+        });
+
+    }
 }
 
 /* 
