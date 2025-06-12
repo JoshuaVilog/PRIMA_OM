@@ -72,6 +72,19 @@
             let operatorID = $(this).val();
 
             // console.log(id);
+            $("#hr1").show();
+            $("#hr2").hide();
+            $("#hr3").hide();
+
+            $("#rowForm1").show();
+            $("#rowDisplay1").hide();
+            $("#rowForm2").show();
+            $("#rowDisplay2").hide();
+
+            $("#btnSave").show();
+            $("#btnIn").hide();
+            $("#btnOut").hide();
+
             $("#modalAllocation").modal("show");
             populateSelectForms();
             $("#txtOperatorID").val(operatorID);
@@ -82,7 +95,63 @@
             let id = $(this).val();
 
             // console.log(id);
-            allocation.GetAttendanceRecord(id);
+            allocation.GetAttendanceRecord(id, function(data){
+                console.log(data);
+                $("#txtDisplayOperatorName").val(main.SetEmployeeName(data.OPERATOR));
+                $("#txtOperatorID").val(data.OPERATOR);
+
+                if(data.ALLOCATION_RID == 0){
+                    // IN
+                    $("#modalTitleAllocation").text("IN");
+
+                    
+                    $("#hr2").show();
+                    $("#hr3").hide();
+                    
+                    $("#btnIn").show();
+                    $("#btnOut").hide();
+
+                    
+                    $("#rowDisplay1").show();
+                    $("#rowForm2").show();
+                    $("#rowDisplay2").hide();
+
+                    populateSelectForms();
+
+                } else {
+                    // OUT
+                    $("#modalTitleAllocation").text("OUT");
+
+                    $("#rowDisplay1").show();
+                    $("#rowForm2").hide();
+                    $("#rowDisplay2").show();
+                    
+                    $("#btnIn").hide();
+                    $("#btnOut").show();
+
+                    $("#txtDisplayShift").val(main.SetShift(data.SHIFT));
+                    $("#txtDisplayAttendanceStatus").val(main.SetAttendanceStatus(data.ATTENDANCE_STATUS));
+                    $("#txtDisplayProcess").val(main.SetProcessName(data.ALLOCATION_RID.PROCESS));
+                    $("#hiddenAllocationID").val(data.ALLOCATION_RID.RID);
+
+                    if(data.ALLOCATION_RID.MACHINE_CODE == 0){
+                        $("#formDisplayMachine").hide();
+                    } else {
+                        $("#formDisplayMachine").show();
+                        $("#txtDisplayMachine").val(main.SetMachineName(data.ALLOCATION_RID.MACHINE_CODE))
+
+                    }
+
+
+                    $("#hr2").hide();
+                    $("#hr3").show();
+                }
+
+            });
+
+            $("#rowForm1").hide();
+            $("#hr1").hide();
+            $("#btnSave").hide();
             $("#modalAllocation").modal("show");
         });
 
@@ -124,10 +193,25 @@
 
 
         });
+        $("#btnOut").click(function(){
+            let allocationID = $("#hiddenAllocationID").val();
+            let remarks = $("#txtRemarks").val();
+
+            allocation.allocationID = allocationID;
+            allocation.remarks = remarks;
+
+            allocation.UpdateOutAllocation(allocation);
+
+
+        });
+
+
+
 
         function populateSelectForms(){
             $("#formMachine").hide();
             allocation.PopulateProcess($("#selectProcess"));
+            allocation.PopulateMachine($("#selectMachine"), 0);
             allocation.PopulateAttendanceStatus($("#selectAttendanceStatus"));
             allocation.PopulateShift($("#selectShift"));
         }

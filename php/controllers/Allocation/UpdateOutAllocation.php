@@ -5,24 +5,16 @@ require_once __DIR__ . '/../../models/AllocationModel.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    $attendanceID = $_POST['attendanceID'];
+    $allocationID = $_POST['allocationID'];
     $remarks = $_POST['remarks'];
 
     try {
         $record = new AllocationModel();
 
-        $record->attttendanceID = $attendanceID;
+        $record->allocationID = $allocationID;
         $record->remarks = $remarks;
 
-        $allocationID = $record::GetAllocationByAttendanceID($attendanceID);
-
-        if($allocationID != NULL){
-
-            $record->allocationID = $allocationID;
-            
-            $record::UpdateOutAllocation($record);
-
-        }
+        $record::UpdateOutAllocation($record);
 
         echo json_encode(['status' => 'success', 'message' => '']);
     } catch (Exception $e){

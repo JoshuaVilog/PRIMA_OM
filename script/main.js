@@ -95,6 +95,18 @@ class Main {
     }
 
 
+    SetShift(id){
+        let list = this.ShiftList();
+        let result = list.find(element => element.a === parseInt(id));
+            
+        return result ? result.b: "";
+    }
+    SetAttendanceStatus(id){
+        let list = this.AttendanceStatusList();
+        let result = list.find(element => element.a === parseInt(id));
+            
+        return result ? result.b: "";
+    }
     SetProcessName(processID){
         let list = JSON.parse(localStorage.getItem(this.lsProcessList));
         let result = list.find(element => element.RID === processID);

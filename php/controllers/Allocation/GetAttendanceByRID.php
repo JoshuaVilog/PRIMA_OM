@@ -10,6 +10,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $records = AllocationModel::GetAttendanceRecord($id);
         
+        $records['ALLOCATION_RID'] = AllocationModel::GetAllocationByAttendanceID($id);
+
         echo json_encode($records);
 
     } catch (Exception $e){

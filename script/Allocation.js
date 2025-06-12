@@ -37,12 +37,12 @@ class Allocation extends Main{
                             let rowData = cell.getRow().getData();
 
                             let setStatus = '<button class="btn btn-success btn-minier btnSetStatus" value="'+rowData.EMPLOYEE_ID+'">Set Status</button>';
-                            let transfer = '<button class="btn btn-warning btn-minier btnModify" value="'+id+'">Modify</button>';
+                            let modify = '<button class="btn btn-warning btn-minier btnModify" value="'+id+'">Modify</button>';
                             
                             if(id == 0){
                                 return setStatus;
                             } else {
-                                return transfer;
+                                return modify;
                             }
                         }},
                     ],
@@ -162,7 +162,7 @@ class Allocation extends Main{
         }
     }
 
-    GetAttendanceRecord(attendanceID){
+    GetAttendanceRecord(attendanceID, callback){
         $.ajax({
             url: "php/controllers/Allocation/GetAttendanceByRID.php",
             method: "POST",
@@ -171,39 +171,43 @@ class Allocation extends Main{
             },
             datatype: "json",
             success: function(response){
-                console.log(response);
-
+                // console.log(response);
+                callback(response)
             },
             error: function(err){
                 console.log("Error:"+JSON.stringify(err));
             },
         });
+    }
+    /* 
+    
+
+    */
+
+    UpdateOutAllocation(allocation){
+
+        $.ajax({
+            url: "php/controllers/Allocation/UpdateOutAllocation.php",
+            method: "POST",
+            data: {
+                allocationID: allocation.allocationID,
+                remarks: allocation.remarks,
+            },
+            datatype: "json",
+            success: function(response){
+                console.log(response);
+                // callback(response)
+
+                alert("TEST")
+            },
+            error: function(err){
+                console.log("Error:"+JSON.stringify(err));
+            },
+        });
+    }
+    UpdateInAllocation(){
+
 
     }
 }
 
-/* 
-
-from this:
-listEmployee = [
-    {"EMPLOYEE_ID": 1, "EMPLOYEE_NAME":"JOHN DOE"},
-    {"EMPLOYEE_ID": 2, "EMPLOYEE_NAME":"JACK COLE"},
-    {"EMPLOYEE_ID": 3, "EMPLOYEE_NAME":"JAB BOLE"},
-    {"EMPLOYEE_ID": 4, "EMPLOYEE_NAME":"JAKE COOL"},
-];
-listAllocation = [
-    {"EMPLOYEE_ID": 1, "STATUS":"PRESENT"},
-    {"EMPLOYEE_ID": 2, "STATUS":"ABSENT"},
-]
-
-to this
-
-listRecord = [
-    {"EMPLOYEE_ID": 1, "STATUS": "PRESENT"},
-    {"EMPLOYEE_ID": 2, "STATUS": "PRESENT"},
-    {"EMPLOYEE_ID": 3, "STATUS": ""},
-    {"EMPLOYEE_ID": 4, "STATUS": ""},
-]
-
-
-*/

@@ -30,7 +30,6 @@ class AllocationModel {
 
             return $row;
         }
-
     }
     public static function InsertAttendance($records){
         $db = DB::connectionODAS();
@@ -83,6 +82,7 @@ class AllocationModel {
             `PROCESS`,
             `MACHINE_CODE`,
             `IN_DATETIME`,
+            `IN_BY`,
             `REMARKS`,
             `CREATED_BY`
         )
@@ -93,6 +93,7 @@ class AllocationModel {
             '$process',
             '$machine',
             '$createdAt',
+            '$userCode',
             '$remarks',
             '$userCode'
         )";
@@ -101,15 +102,15 @@ class AllocationModel {
     public static function GetAllocationByAttendanceID($attendanceID){
         $db = DB::connectionODAS();
 
-        $sql = "SELECT RID FROM `allocation_masterlist` WHERE ATTENDANCE_ID = '$attendanceID' AND OUT_DATETIME IS NULL";
+        $sql = "SELECT RID, PROCESS, MACHINE_CODE FROM `allocation_masterlist` WHERE ATTENDANCE_ID = '$attendanceID' AND OUT_DATETIME IS NULL";
         $result = mysqli_query($db,$sql);
 
         if(mysqli_num_rows($result) == 0){
-            return null;
+            return 0;
         } else {
             $row = mysqli_fetch_assoc($result);
 
-            return $row['RID'];
+            return $row;
         }
     }
     public static function UpdateOutAllocation($records){
@@ -126,7 +127,7 @@ class AllocationModel {
             SET
                 `OUT_DATETIME` = '$createdAt',
                 `OUT_BY` = '$userCode',
-                `REMARKS` = '$remarks'
+                `REMARKS` = '$remarks',
                 `UPDATED_BY` = '$userCode'
             WHERE
                 `RID` = $allocationID";
