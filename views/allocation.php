@@ -99,6 +99,9 @@
                 console.log(data);
                 $("#txtDisplayOperatorName").val(main.SetEmployeeName(data.OPERATOR));
                 $("#txtOperatorID").val(data.OPERATOR);
+                $("#txtDisplayShift").val(main.SetShift(data.SHIFT));
+                $("#txtDisplayAttendanceStatus").val(main.SetAttendanceStatus(data.ATTENDANCE_STATUS));
+                $("#hiddenAttendanceID").val(data.RID);
 
                 if(data.ALLOCATION_RID == 0){
                     // IN
@@ -116,6 +119,8 @@
                     $("#rowForm2").show();
                     $("#rowDisplay2").hide();
 
+                    $("#hiddenAllocationID").val("");
+
                     populateSelectForms();
 
                 } else {
@@ -129,10 +134,9 @@
                     $("#btnIn").hide();
                     $("#btnOut").show();
 
-                    $("#txtDisplayShift").val(main.SetShift(data.SHIFT));
-                    $("#txtDisplayAttendanceStatus").val(main.SetAttendanceStatus(data.ATTENDANCE_STATUS));
                     $("#txtDisplayProcess").val(main.SetProcessName(data.ALLOCATION_RID.PROCESS));
                     $("#hiddenAllocationID").val(data.ALLOCATION_RID.RID);
+                    $("#txtRemarks").val(data.ALLOCATION_RID.REMARKS);
 
                     if(data.ALLOCATION_RID.MACHINE_CODE == 0){
                         $("#formDisplayMachine").hide();
@@ -141,7 +145,6 @@
                         $("#txtDisplayMachine").val(main.SetMachineName(data.ALLOCATION_RID.MACHINE_CODE))
 
                     }
-
 
                     $("#hr2").hide();
                     $("#hr3").show();
@@ -188,9 +191,10 @@
             allocation.process = process;
             allocation.machine = machine;
             allocation.remarks = remarks;
+            allocation.modal = $("#modalAllocation");
+            allocation.table = "#table-records";
 
             allocation.InsertEmployeeAttendance(allocation);
-
 
         });
         $("#btnOut").click(function(){
@@ -200,11 +204,30 @@
             allocation.allocationID = allocationID;
             allocation.remarks = remarks;
 
+            allocation.date = $("#txtDate").val();
+            allocation.modal = $("#modalAllocation");
+            allocation.table = "#table-records";
+
             allocation.UpdateOutAllocation(allocation);
-
-
         });
+        $("#btnIn").click(function(){
+            let attendanceID = $("#hiddenAttendanceID").val();
+            let operator = $("#txtOperatorID").val();
+            let process = $("#selectProcess").val();
+            let machine = $("#selectMachine").val();
+            let remarks = $("#txtRemarks").val();
 
+            allocation.process = process;
+            allocation.machine = machine;
+            allocation.attendanceID = attendanceID;
+            allocation.remarks = remarks;
+
+            allocation.date = $("#txtDate").val();
+            allocation.modal = $("#modalAllocation");
+            allocation.table = "#table-records";
+
+            allocation.UpdateInAllocation(allocation);
+        });
 
 
 
@@ -214,6 +237,7 @@
             allocation.PopulateMachine($("#selectMachine"), 0);
             allocation.PopulateAttendanceStatus($("#selectAttendanceStatus"));
             allocation.PopulateShift($("#selectShift"));
+            $("#txtRemarks").val("");
         }
 
 

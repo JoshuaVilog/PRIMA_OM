@@ -102,7 +102,7 @@ class AllocationModel {
     public static function GetAllocationByAttendanceID($attendanceID){
         $db = DB::connectionODAS();
 
-        $sql = "SELECT RID, PROCESS, MACHINE_CODE FROM `allocation_masterlist` WHERE ATTENDANCE_ID = '$attendanceID' AND OUT_DATETIME IS NULL";
+        $sql = "SELECT RID, PROCESS, MACHINE_CODE, REMARKS FROM `allocation_masterlist` WHERE ATTENDANCE_ID = '$attendanceID' AND OUT_DATETIME IS NULL";
         $result = mysqli_query($db,$sql);
 
         if(mysqli_num_rows($result) == 0){

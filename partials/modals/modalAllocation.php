@@ -95,6 +95,7 @@
                 </div>
 
                 <input type="hidden" id="hiddenAllocationID">
+                <input type="hidden" id="hiddenAttendanceID">
             </div>
             <div class="modal-footer">
                 <button class="btn btn-primary" id="btnSave">SAVE</button>

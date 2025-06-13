@@ -30,8 +30,13 @@ class Allocation extends Main{
                         {title: "#", formatter: "rownum", },
                         {title: "ID", field: "ALLOCATION_ID", headerFilter: "input", visible: false, },
                         {title: "OPERATOR", field: "EMPLOYEE_NAME", headerFilter: "input"},
-                        {title: "SHIFT", field: "SHIFT", },
-                        {title: "STATUS", field: "ATTENDANCE_STATUS", },
+                        {title: "SHIFT", field: "SHIFT", formatter: function(cell){
+
+                            return (cell.getValue() != 0) ? main.SetShift(cell.getValue()) : "-";
+                        }, },
+                        {title: "STATUS", field: "ATTENDANCE_STATUS", formatter: function(cell){
+                            return (cell.getValue() != 0) ? main.SetAttendanceStatus(cell.getValue()) : "-";
+                        }, },
                         {title: "ACTION", field:"ALLOCATION_ID", width: 300, hozAlign: "left", frozen: true, headerSort: false, frozen:true, formatter:function(cell){
                             let id = cell.getValue();
                             let rowData = cell.getRow().getData();
@@ -42,7 +47,12 @@ class Allocation extends Main{
                             if(id == 0){
                                 return setStatus;
                             } else {
-                                return modify;
+                                if(rowData.ATTENDANCE_STATUS == "1"){
+
+                                    return modify;
+                                } else {
+                                    return "-";
+                                }
                             }
                         }},
                     ],
@@ -118,8 +128,9 @@ class Allocation extends Main{
     }
 
     InsertEmployeeAttendance(attendance){
+        let self = this;
 
-        if(attendance.date == "" || attendance.process == ""){
+        if(attendance.date == "" || attendance.process == "" && attendance.attendanceStatus == "1"){
             Swal.fire({
                 title: 'Incomplete Form.',
                 text: 'Please complete the login form.',
@@ -144,7 +155,7 @@ class Allocation extends Main{
                     console.log(response);
     
                     Swal.fire({
-                        title: 'Record added successfully!',
+                        title: 'Attendance saved successfully!',
                         text: '',
                         icon: 'success',
                         confirmButtonColor: '#3085d6',
@@ -152,6 +163,8 @@ class Allocation extends Main{
                         timer: 2000,
                         willClose: () => {
                             // window.location.href = "dashboard";
+                            attendance.modal.modal("hide");
+                            self.DisplayRecords(attendance.date, attendance.table);
                         },
                     })
                 },
@@ -185,7 +198,7 @@ class Allocation extends Main{
     */
 
     UpdateOutAllocation(allocation){
-
+        let self = this;
         $.ajax({
             url: "php/controllers/Allocation/UpdateOutAllocation.php",
             method: "POST",
@@ -195,18 +208,67 @@ class Allocation extends Main{
             },
             datatype: "json",
             success: function(response){
-                console.log(response);
+                // console.log(response);
                 // callback(response)
 
-                alert("TEST")
+                Swal.fire({
+                    title: 'Operator Out successfully!',
+                    text: '',
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Proceed!',
+                    timer: 2000,
+                    willClose: () => {
+                        // window.location.href = "dashboard";
+                        allocation.modal.modal("hide");
+                        self.DisplayRecords(allocation.date, allocation.table);
+
+
+                    },
+                })
             },
             error: function(err){
                 console.log("Error:"+JSON.stringify(err));
             },
         });
     }
-    UpdateInAllocation(){
+    UpdateInAllocation(allocation){
+        let self = this;
+        $.ajax({
+            url: "php/controllers/Allocation/UpdateInAllocation.php",
+            method: "POST",
+            data: {
+                attendanceID: allocation.attendanceID,
+                operator: allocation.operator,
+                process: allocation.process,
+                machine: allocation.machine,
+                remarks: allocation.remarks,
+            },
+            datatype: "json",
+            success: function(response){
+                // console.log(response);
+                // callback(response)
 
+                Swal.fire({
+                    title: 'Operator In successfully!',
+                    text: '',
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Proceed!',
+                    timer: 2000,
+                    willClose: () => {
+                        // window.location.href = "dashboard";
+                        allocation.modal.modal("hide");
+                        self.DisplayRecords(allocation.date, allocation.table);
+
+
+                    },
+                })
+            },
+            error: function(err){
+                console.log("Error:"+JSON.stringify(err));
+            },
+        });
 
     }
 }
