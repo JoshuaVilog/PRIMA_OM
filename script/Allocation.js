@@ -2,6 +2,7 @@ class Allocation extends Main{
     constructor(){
         super()
         this.tableDisplay = null;
+        this.tableDisplayAllocationLogs = null;
     }
 
     DisplayRecords(date, tableElem){
@@ -55,6 +56,66 @@ class Allocation extends Main{
                                 }
                             }
                         }},
+                    ],
+                });
+            },
+            error: function(err){
+                console.log("Error:"+JSON.stringify(err));
+            },
+        });
+    }
+    DisplayAllocationLogRecords(tableElem){
+        let self = this;
+
+        $.ajax({
+            url: "php/controllers/Allocation/AllocationLogsRecords.php",
+            method: "POST",
+            data: {},
+            datatype: "json",
+            success: function(response){
+
+                // console.log(response);
+
+                self.tableDisplayAllocationLogs = new Tabulator(tableElem, {
+                    data: response.data,
+                    pagination: "local",
+                    paginationSize: 25,
+                    paginationSizeSelector: [25, 50, 100],
+                    page: 1,
+                    ajaxURL: "your_data_endpoint_here.json",
+                    layout: "fitDataFill",
+                    columns: [
+                        {title: "#", formatter: "rownum", },
+                        {title: "ID", field: "RID", headerFilter: "input", visible: false, },
+                        {title: "OPERATOR", field: "OPERATOR", headerSort: false, formatter: function(cell){
+                            let value = cell.getValue();
+                            
+                            return (value != 0) ? main.SetEmployeeName(value) : "-";
+                        }, },
+                        {title: "PROCESS", field: "PROCESS", headerSort: false, formatter: function(cell){
+                            let value = cell.getValue();
+
+                            return (value != 0) ? main.SetProcessName(value) : "-";
+                        }, },
+                        {title: "MACHINE", field: "MACHINE_CODE", headerSort: false, formatter: function(cell){
+                            let value = cell.getValue();
+
+                            return (value != 0) ? main.SetMachineName(value) : "-";
+                        },},
+                        {title: "IN", field: "IN_DATETIME", headerSort: false, },
+                        {title: "IN", field: "IN_BY", headerSort: false, formatter: function(cell){
+                            let value = cell.getValue();
+
+                            return (value != 0) ? main.SetEmployeeName(value) : "-";
+                        },},
+                        {title: "OUT", field: "OUT_DATETIME", headerSort: false, },
+                        {title: "OUT", field: "OUT_BY", headerSort: false, formatter: function(cell){
+                            let value = cell.getValue();
+
+                            return (value != 0) ? main.SetEmployeeName(value) : "-";
+                        },},
+                        {title: "REMARKS", field: "REMARKS", headerSort: false,  },
+                        {title: "ACTION", field:"RID", width: 300, hozAlign: "left", frozen: true, headerSort: false, frozen:true, visible: false, formatter:function(cell){}},
                     ],
                 });
             },

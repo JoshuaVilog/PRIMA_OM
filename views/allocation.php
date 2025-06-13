@@ -96,7 +96,7 @@
 
             // console.log(id);
             allocation.GetAttendanceRecord(id, function(data){
-                console.log(data);
+                // console.log(data);
                 $("#txtDisplayOperatorName").val(main.SetEmployeeName(data.OPERATOR));
                 $("#txtOperatorID").val(data.OPERATOR);
                 $("#txtDisplayShift").val(main.SetShift(data.SHIFT));
@@ -221,6 +221,7 @@
             allocation.machine = machine;
             allocation.attendanceID = attendanceID;
             allocation.remarks = remarks;
+            allocation.operator = operator;
 
             allocation.date = $("#txtDate").val();
             allocation.modal = $("#modalAllocation");

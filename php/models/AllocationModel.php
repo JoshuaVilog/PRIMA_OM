@@ -18,6 +18,20 @@ class AllocationModel {
 
         return $records;
     }
+    public static function AllocationLogsRecords() {
+        $db = DB::connectionODAS();
+        $sql = "SELECT `RID`, `OPERATOR`, `PROCESS`, `MACHINE_CODE`, `IN_DATETIME`, `IN_BY`, `OUT_DATETIME`, `OUT_BY`, `REMARKS` FROM `allocation_masterlist` WHERE COALESCE(DELETED_AT, '') = ''";
+        $result = $db->query($sql);
+
+        $records = [];
+        if ($result && $result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $records[] = $row;
+            }
+        }
+
+        return $records;
+    }
     public static function GetAttendanceRecord($id){
         $db = DB::connectionODAS();
         $sql = "SELECT `RID`, `OPERATOR`, `DATE`, `SHIFT`, `ATTENDANCE_STATUS`, `CREATED_AT`, `CREATED_BY` FROM `attendance_masterlist` WHERE RID = $id";
@@ -31,6 +45,7 @@ class AllocationModel {
             return $row;
         }
     }
+    //
     public static function InsertAttendance($records){
         $db = DB::connectionODAS();
         $userCode = $_SESSION['USER_CODE'];
