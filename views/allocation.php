@@ -15,20 +15,38 @@
                         <h1>OPERATOR DAILY ALLOCATION</h1>
                     </div>
                     <div class="row">
-                        <div class="col-xs-6 col-sm-12 pricing-box">
-                            <div class="widget-box widget-color-orange">
+                        <div class="col-xs-12 col-sm-12 pricing-box">
+                            <div class="widget-box widget-color-orange" style="">
                                 <div class="widget-header">
                                     <h5 class="widget-title bigger lighter">List</h5>
                                 </div>
                                 <div class="widget-body">
                                     <div class="widget-main">
                                         <div class="row">
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-3 col-xs-12">
                                                 <div class="form-group">
                                                     <label>
                                                         <strong>SELECT DATE:</strong>
                                                     </label>
                                                     <input type="date" id="txtDate" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6 col-xs-12"></div>
+                                            <div class="col-sm-3 col-xs-12">
+                                                <div class="form-group">
+                                                    <label>
+                                                        <strong>TOTAL OPERATOR ATTENDANCE:</strong>
+                                                    </label>
+                                                    <label for="">
+                                                        <span id="spanTotalOperatorAttendance">-</span>
+                                                    </label>
+                                                    <br>
+                                                    <label>
+                                                        <strong>TOTAL RECORDED:</strong>
+                                                    </label>
+                                                    <label for="">
+                                                        <span id="spanTotalRecorded">-</span>
+                                                    </label>
                                                 </div>
                                             </div>
                                         </div>
@@ -56,8 +74,15 @@
     <script src="/<?php echo $rootFolder; ?>/script/Allocation.js?v=<?php echo $generateRandomNumber; ?>"></script>
     <script>
         let allocation = new Allocation();
+        let sessionStorageItem = "allocation-datetime";
+
+        sessionStorage.setItem(sessionStorageItem, main.GetPhilippinesDateTime());
+
+        setInterval(() => {
+            allocation.RealtimeFetch(sessionStorageItem, $("#txtDate").val());
+        }, 5000);
     
-        $("#txtDate").val(main.GetCurrentDate());
+        $("#txtDate").val(main.GetShiftDate());
 
         //DISPLAY RECORDS
         allocation.DisplayRecords(main.GetCurrentDate(), "#table-records");
@@ -178,6 +203,7 @@
         $("#btnSave").click(function(){
             let date = $("#txtDate").val();
             let operator = $("#txtOperatorID").val();
+            let operatorName = $("#txtDisplayOperatorName").val();
             let shift = $("#selectShift").val();
             let attendanceStatus = $("#selectAttendanceStatus").val();
             let process = $("#selectProcess").val();
@@ -186,6 +212,7 @@
 
             allocation.date = date;
             allocation.operator = operator;
+            allocation.operatorName = operatorName;
             allocation.shift = shift;
             allocation.attendanceStatus = attendanceStatus;
             allocation.process = process;
@@ -230,8 +257,6 @@
             allocation.UpdateInAllocation(allocation);
         });
 
-
-
         function populateSelectForms(){
             $("#formMachine").hide();
             allocation.PopulateProcess($("#selectProcess"));
@@ -239,11 +264,13 @@
             allocation.PopulateAttendanceStatus($("#selectAttendanceStatus"));
             allocation.PopulateShift($("#selectShift"));
             $("#txtRemarks").val("");
+
         }
 
 
 
         /* 
+        
 
         */
 

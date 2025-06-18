@@ -50,6 +50,8 @@
 
         allocation.DisplayAllocationLogRecords("#table-records")
 
-
+    /* 
+    
+    */
     </script>
 

@@ -6,6 +6,7 @@ require_once __DIR__ . '/../../models/AllocationModel.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $operator = $_POST['operator'];
+    $operatorName = $_POST['operatorName'];
     $date = $_POST['date'];
     $shift = $_POST['shift'];
     $attendanceStatus = $_POST['attendanceStatus'];
@@ -34,8 +35,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $record::InsertAllocationLogs($record);
         }
 
+        $return = ['id' => $operator, 'ALLOCATION_ID' => $attendanceID, 'ATTENDANCE_STATUS' => $attendanceStatus, 'EMPLOYEE_ID' => $operator, 'EMPLOYEE_NAME' => $operatorName, 'SHIFT' => $shift,];
 
-        echo json_encode(['status' => 'success', 'message' => '']);
+
+        echo json_encode(['status' => 'success', 'message' => $return]);
     } catch (Exception $e){
         echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
     }

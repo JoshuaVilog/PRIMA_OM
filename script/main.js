@@ -18,6 +18,75 @@ class Main {
         return formattedDate;
 
     }
+    GetPhilippinesDateTime(){
+        const options = {
+            timeZone: "Asia/Manila", 
+            year: "numeric", 
+            month: "2-digit", 
+            day: "2-digit", 
+            hour: "2-digit", 
+            minute: "2-digit", 
+            second: "2-digit",
+            hour12: false
+        };
+    
+        const formatter = new Intl.DateTimeFormat("en-US", options);
+        const parts = formatter.formatToParts(new Date());
+    
+        // Format to YYYY-MM-DD HH:MM:SS
+        const year = parts.find(p => p.type === "year").value;
+        const month = parts.find(p => p.type === "month").value;
+        const day = parts.find(p => p.type === "day").value;
+        const hour = parts.find(p => p.type === "hour").value;
+        const minute = parts.find(p => p.type === "minute").value;
+        const second = parts.find(p => p.type === "second").value;
+    
+        return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
+    }
+    GetShiftDate(){
+        // Get current time in Philippines (UTC+8)
+        const currentDate = new Date();
+        const philippinesOffset = 8 * 60; // in minutes
+        const utc = currentDate.getTime() + (currentDate.getTimezoneOffset() * 60000);
+        const phTime = new Date(utc + (philippinesOffset * 60000));
+
+        const hour = phTime.getHours();
+
+        let year = currentDate.getFullYear();
+        let month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-indexed
+        let day = currentDate.getDate().toString().padStart(2, '0');
+        // let formattedDate = `${year}-${month}-${day}`;
+
+        // Determine shift
+        /* if (hour >= 7 && hour < 19) {
+            return "Dayshift";
+        } else {
+            return "Nightshift";
+        } */
+        if (hour >= 7 && hour < 19) {
+            let day = currentDate.getDate().toString().padStart(2, '0');
+        } else {
+            let day = currentDate.getDate().toString().padStart(2, '0') - 1;
+        }
+
+        return `${year}-${month}-${day}`
+    }
+    GetShiftType(){
+        // Get current time in Philippines (UTC+8)
+        const now = new Date();
+        const philippinesOffset = 8 * 60; // in minutes
+        const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+        const phTime = new Date(utc + (philippinesOffset * 60000));
+
+        const hour = phTime.getHours();
+
+        // Determine shift
+        if (hour >= 7 && hour < 19) {
+            return 1;
+        } else {
+            return 2;
+        }
+    }
 
     AttendanceStatusList(){
         let list = [

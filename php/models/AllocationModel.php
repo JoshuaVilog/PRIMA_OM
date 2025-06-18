@@ -12,12 +12,49 @@ class AllocationModel {
         $records = [];
         if ($result && $result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
+                
                 $records[] = $row;
             }
         }
 
         return $records;
     }
+    public static function RealtimeAllocationRecord($oldDateTime, $date){
+        $db = DB::connectionODAS();
+
+        date_default_timezone_set('Asia/Manila');
+        $createdAt = date("Y-m-d H:i:s");
+
+        $sql = "SELECT `RID`, `OPERATOR`, `SHIFT`, `ATTENDANCE_STATUS` FROM `attendance_masterlist` WHERE DATE = '$date' AND REALTIME_ACTION >= '$oldDateTime' AND REALTIME_ACTION <= '$createdAt'";
+        $result = $db->query($sql);
+        $num = $result->num_rows;
+
+        if($num == 0){
+            return 0;
+        } else {
+            $records = [];
+
+            if ($result && $result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    
+                    $records[] = array(
+                        "id" => $row['OPERATOR'],
+                        "EMPLOYEE_ID" => $row['OPERATOR'],
+                        "EMPLOYEE_NAME" => '',
+                        "ALLOCATION_ID" => $row['RID'],
+                        "SHIFT" => $row['SHIFT'],
+                        "ATTENDANCE_STATUS" => $row['ATTENDANCE_STATUS'],
+                    );
+                }
+            }
+
+            return $records;
+        }
+
+        
+        // return $result->num_rows;
+    }
+    
     public static function AllocationLogsRecords() {
         $db = DB::connectionODAS();
         $sql = "SELECT `RID`, `OPERATOR`, `PROCESS`, `MACHINE_CODE`, `IN_DATETIME`, `IN_BY`, `OUT_DATETIME`, `OUT_BY`, `REMARKS` FROM `allocation_masterlist` WHERE COALESCE(DELETED_AT, '') = ''";

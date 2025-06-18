@@ -30,6 +30,7 @@ try {
             }
         }
 
+        $newRow['id'] = $operator['EMPLOYEE_ID'];
         $newRow['EMPLOYEE_ID'] = $operator['EMPLOYEE_ID'];
         $newRow['EMPLOYEE_NAME'] = $operator['EMPLOYEE_NAME'];
         $newRow['ALLOCATION_ID'] = $allocationID;

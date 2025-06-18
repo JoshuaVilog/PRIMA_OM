@@ -4,6 +4,10 @@ class Allocation extends Main{
         this.tableDisplay = null;
         this.tableDisplayAllocationLogs = null;
     }
+    DisplayTotalAttendance(){
+        
+
+    }
 
     DisplayRecords(date, tableElem){
         let self = this;
@@ -26,19 +30,21 @@ class Allocation extends Main{
                     paginationSizeSelector: [25, 50, 100],
                     page: 1,
                     ajaxURL: "your_data_endpoint_here.json",
-                    layout: "fitDataFill",
+                    layout:"fitDataFill",
+                    responsiveLayout:"collapse",
                     columns: [
-                        {title: "#", formatter: "rownum", },
+                        {title: "#", formatter: "rownum", visible: true, },
+                        {title: "id", field:"id", visible: false, },
                         {title: "ID", field: "ALLOCATION_ID", headerFilter: "input", visible: false, },
-                        {title: "OPERATOR", field: "EMPLOYEE_NAME", headerFilter: "input"},
+                        {title: "OPERATOR", field: "EMPLOYEE_NAME", headerFilter: "input", resizable: false,},
                         {title: "SHIFT", field: "SHIFT", formatter: function(cell){
 
                             return (cell.getValue() != 0) ? main.SetShift(cell.getValue()) : "-";
-                        }, },
+                        }, resizable: false, },
                         {title: "STATUS", field: "ATTENDANCE_STATUS", formatter: function(cell){
                             return (cell.getValue() != 0) ? main.SetAttendanceStatus(cell.getValue()) : "-";
-                        }, },
-                        {title: "ACTION", field:"ALLOCATION_ID", width: 300, hozAlign: "left", frozen: true, headerSort: false, frozen:true, formatter:function(cell){
+                        }, resizable: false, },
+                        {title: "ACTION", field:"ALLOCATION_ID", hozAlign: "left", headerSort: false, resizable: false, frozen:true, formatter:function(cell){
                             let id = cell.getValue();
                             let rowData = cell.getRow().getData();
 
@@ -124,7 +130,54 @@ class Allocation extends Main{
             },
         });
     }
-  
+    RealtimeFetch(sessionStorageItem, date){
+        
+        let datetime = sessionStorage.getItem(sessionStorageItem);  
+        let self = this;
+
+        $.ajax({
+            url: 'php/controllers/Allocation/RealtimeFetchAllocationRecord.php', 
+            type: 'POST',
+            data:{
+                date: date,
+                oldDateTime: datetime,
+            },
+            success: function(data) {
+                // console.log(data);
+               
+                sessionStorage.setItem(sessionStorageItem, self.GetPhilippinesDateTime());
+
+                if(data != 0){
+
+                    // console.log(data);
+                    let newData = data.map(function(value){
+                        return {
+                            "id": value['id'],
+                            "EMPLOYEE_ID": value['EMPLOYEE_ID'],
+                            "EMPLOYEE_NAME": main.SetEmployeeName(value['EMPLOYEE_ID']),
+                            "ALLOCATION_ID": value['ALLOCATION_ID'],
+                            "SHIFT": value['SHIFT'],
+                            "ATTENDANCE_STATUS": value['ATTENDANCE_STATUS'],
+                        }
+
+                    });
+
+                    // console.log(newData);
+                    self.UpdateTableDisplay(newData);
+                }
+                
+        
+            },
+            error: function(err) {
+                console.log("Error:"+JSON.stringify(err));
+            }
+        });
+
+    }
+
+  /* 
+ 
+  */
     PopulateProcess(selectElem){
         let list = JSON.parse(localStorage.getItem(this.lsProcessList));
         let options = '<option value="">-Select-</option>';
@@ -170,8 +223,12 @@ class Allocation extends Main{
         let options = '';
         
         for(let index = 0; index < list.length; index++){
-            options += '<option value="'+list[index].a+'">'+list[index].b+'</option>';
-
+            let selected = "";
+            if(this.GetShiftType() == list[index].a){
+                selected = "selected";
+            }
+            
+            options += '<option value="'+list[index].a+'" '+selected+'>'+list[index].b+'</option>';
         }
 
         selectElem.html(options);
@@ -187,6 +244,10 @@ class Allocation extends Main{
             return "PROCESS";
         }
     }
+
+    /* 
+    
+    */
 
     InsertEmployeeAttendance(attendance){
         let self = this;
@@ -204,6 +265,7 @@ class Allocation extends Main{
                 method: "POST",
                 data: {
                     operator: attendance.operator,
+                    operatorName: attendance.operatorName,
                     date: attendance.date,
                     shift: attendance.shift,
                     attendanceStatus: attendance.attendanceStatus,
@@ -213,8 +275,12 @@ class Allocation extends Main{
                 },
                 datatype: "json",
                 success: function(response){
-                    console.log(response);
-    
+                    response = JSON.parse(response);
+
+                    console.log(response.message);
+
+                    self.UpdateTableDisplay([response.message]);
+
                     Swal.fire({
                         title: 'Attendance saved successfully!',
                         text: '',
@@ -225,12 +291,13 @@ class Allocation extends Main{
                         willClose: () => {
                             // window.location.href = "dashboard";
                             attendance.modal.modal("hide");
-                            self.DisplayRecords(attendance.date, attendance.table);
+                            // self.DisplayRecords(attendance.date, attendance.table);
                         },
                     })
                 },
                 error: function(err){
                     console.log("Error:"+JSON.stringify(err));
+                    alert("Error inserting.");
                 },
             });
         }
@@ -253,10 +320,7 @@ class Allocation extends Main{
             },
         });
     }
-    /* 
     
-
-    */
 
     UpdateOutAllocation(allocation){
         let self = this;
@@ -330,6 +394,18 @@ class Allocation extends Main{
                 console.log("Error:"+JSON.stringify(err));
             },
         });
+    }
+
+    UpdateTableDisplay(data){
+        let parseData = data;
+
+        this.tableDisplay.updateData(parseData);
+
+        /* this.tableDisplay.updateData(parseData).then(() => {
+            console.log("Column updated successfully");
+        }).catch((error) => {
+            console.error("Error updating column:", error);
+        }); */
 
     }
 }
