@@ -28,6 +28,14 @@
 
             <b class="arrow"></b>
         </li>
+        <li class="" id="">
+            <a href="fix_allocation">
+                <i class="menu-icon fa fa-folder"></i>
+                <span class="menu-text"> Fixed Allocation </span>
+            </a>
+
+            <b class="arrow"></b>
+        </li>
 
         <!-- 
         <li class="" id="">

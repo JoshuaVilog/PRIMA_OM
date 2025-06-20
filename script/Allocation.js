@@ -3,11 +3,18 @@ class Allocation extends Main{
         super()
         this.tableDisplay = null;
         this.tableDisplayAllocationLogs = null;
+        this.totalOperatorAttendance = 0;
+        this.totalOperatorRecorded = 0;
     }
-    DisplayTotalAttendance(){
-        
+    DisplayTotalAttendance(elemTotalOperator, elemTotalRecorded){
+
+        elemTotalOperator.text(this.totalOperatorAttendance);
+        elemTotalRecorded.text(this.totalOperatorRecorded);
 
     }
+    /* 
+
+    */
 
     DisplayRecords(date, tableElem){
         let self = this;
@@ -20,8 +27,12 @@ class Allocation extends Main{
             },
             datatype: "json",
             success: function(response){
-
                 // console.log(response);
+                let totalNotRecorded = response.data.filter(function(x){return x.ALLOCATION_ID == 0}).length;
+
+                self.totalOperatorAttendance = response.data.length;
+                self.totalOperatorRecorded = self.totalOperatorAttendance - totalNotRecorded;
+
 
                 self.tableDisplay = new Tabulator(tableElem, {
                     data: response.data,
@@ -178,12 +189,17 @@ class Allocation extends Main{
   /* 
  
   */
-    PopulateProcess(selectElem){
+    PopulateProcess(selectElem, id){
         let list = JSON.parse(localStorage.getItem(this.lsProcessList));
         let options = '<option value="">-Select-</option>';
 
         for(let index = 0; index < list.length; index++){
-            options += '<option value="'+list[index].RID+'">'+list[index].PROCESS_NAME+'</option>';
+            let selected = "";
+            if(id != undefined && list[index].RID == id){
+                selected = "selected";
+            }
+
+            options += '<option value="'+list[index].RID+'" '+selected+'>'+list[index].PROCESS_NAME+'</option>';
 
         }
 
@@ -199,8 +215,11 @@ class Allocation extends Main{
             for(let index = 0; index < list.length; index++){
 
                 if(processID == list[index].MACHINE_TYPE){
-    
-                    options += '<option value="'+list[index].RID+'">'+list[index].MACHINE_NAME+'</option>';
+                    let selected = "";
+                    if(id != undefined && list[index].RID == id){
+                        selected = "selected";
+                    }
+                    options += '<option value="'+list[index].RID+'" '+selected+'>'+list[index].MACHINE_NAME+'</option>';
                 }
             }
         }

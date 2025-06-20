@@ -80,17 +80,23 @@
 
         setInterval(() => {
             allocation.RealtimeFetch(sessionStorageItem, $("#txtDate").val());
+            displayTotalAttendance();
         }, 5000);
     
         $("#txtDate").val(main.GetShiftDate());
 
         //DISPLAY RECORDS
         allocation.DisplayRecords(main.GetCurrentDate(), "#table-records");
+        
+        setTimeout(() => {
+            displayTotalAttendance();
+        }, 1000);
 
         $("#txtDate").change(function(){
             let date = $(this).val();
 
             allocation.DisplayRecords(date, "#table-records");
+            displayTotalAttendance();
         });
 
         $("#table-records").on("click", ".btnSetStatus", function(){
@@ -266,13 +272,15 @@
             $("#txtRemarks").val("");
 
         }
+        function displayTotalAttendance(){
+            let totalOperator = $("#spanTotalOperatorAttendance");
+            let totalRecorded = $("#spanTotalRecorded");
+
+            allocation.DisplayTotalAttendance(totalOperator, totalRecorded);
+        }
 
 
-
-        /* 
-        
-
-        */
+        /*   */
 
 
     </script>
