@@ -24,6 +24,14 @@ class FixedAllocation {
                     layout: "fitDataFill",
                     columns: [
                         {title: "ID", field: "id", visible:false, headerFilter: "input"},
+                        {title: "#", formatter: function(cell) {
+                            const row = cell.getRow();
+                            const table = row.getTable();
+                            const page = table.getPage(); // current page number
+                            const size = table.getPageSize(); // rows per page
+                            const rowIndex = row.getPosition(true); // position in data
+                            return ((page - 1) * size) + row.getPosition(true);
+                        },},
                         {title: "OPERATOR", field: "OPERATOR_NAME", headerFilter: "input"},
                         {title: "PROCESS", field: "PROCESS", formatter: function(cell){
                             let value = cell.getValue();
@@ -53,23 +61,37 @@ class FixedAllocation {
 
     }
 
-    UpdateFixedAllocation(){
+    UpdateFixedAllocation(allocation){
+        let self = this;
         $.ajax({
-            url: "php/controllers/FixedAllocation/DisplayFixedAllocation.php",
+            url: "php/controllers/FixedAllocation/UpdateFixedAllocation.php",
             method: "POST",
             data: {
-                date: date,
+                operator: allocation.operator,
+                process: allocation.process,
+                machine: allocation.machine,
+                allocationID: allocation.allocationID,
             },
             datatype: "json",
             success: function(response){
-                // console.log(response);
-
+                console.log(response);
+                Swal.fire({
+                    title: 'Allocation saved successfully!',
+                    text: '',
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Proceed!',
+                    timer: 2000,
+                    willClose: () => {
+                        allocation.modal.modal("hide");
+                        self.DisplayFixedAllocation(allocation.table);
+                    },
+                })
             },
             error: function(err){
                 console.log("Error:"+JSON.stringify(err));
             },
         });
-
     }
 
     FindOperatorFixedAllocation(operator, callback){
@@ -82,7 +104,7 @@ class FixedAllocation {
             datatype: "json",
             success: function(response){
                 // console.log(response);
-                callback(response);
+                callback(response.message);
             },
             error: function(err){
                 console.log("Error:"+JSON.stringify(err));

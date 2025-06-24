@@ -44,7 +44,14 @@ class Allocation extends Main{
                     layout:"fitDataFill",
                     responsiveLayout:"collapse",
                     columns: [
-                        {title: "#", formatter: "rownum", visible: true, },
+                        {title: "#", visible: true, formatter: function(cell) {
+                            const row = cell.getRow();
+                            const table = row.getTable();
+                            const page = table.getPage(); // current page number
+                            const size = table.getPageSize(); // rows per page
+                            const rowIndex = row.getPosition(true); // position in data
+                            return ((page - 1) * size) + row.getPosition(true);
+                        },},
                         {title: "id", field:"id", visible: false, },
                         {title: "ID", field: "ALLOCATION_ID", headerFilter: "input", visible: false, },
                         {title: "OPERATOR", field: "EMPLOYEE_NAME", headerFilter: "input", resizable: false,},
@@ -102,7 +109,14 @@ class Allocation extends Main{
                     ajaxURL: "your_data_endpoint_here.json",
                     layout: "fitDataFill",
                     columns: [
-                        {title: "#", formatter: "rownum", },
+                        {title: "#", formatter: function(cell) {
+                            const row = cell.getRow();
+                            const table = row.getTable();
+                            const page = table.getPage(); // current page number
+                            const size = table.getPageSize(); // rows per page
+                            const rowIndex = row.getPosition(true); // position in data
+                            return ((page - 1) * size) + row.getPosition(true);
+                        }, },
                         {title: "ID", field: "RID", headerFilter: "input", visible: false, },
                         {title: "OPERATOR", field: "OPERATOR", headerSort: false, formatter: function(cell){
                             let value = cell.getValue();
@@ -205,7 +219,7 @@ class Allocation extends Main{
 
         selectElem.html(options);
     }
-    PopulateMachine(selectElem, processID){
+    PopulateMachine(selectElem, processID, machineCode){
         let list = JSON.parse(localStorage.getItem(this.lsMachineList));
         let options = '';
 
@@ -216,7 +230,7 @@ class Allocation extends Main{
 
                 if(processID == list[index].MACHINE_TYPE){
                     let selected = "";
-                    if(id != undefined && list[index].RID == id){
+                    if(machineCode != undefined && list[index].RID == machineCode){
                         selected = "selected";
                     }
                     options += '<option value="'+list[index].RID+'" '+selected+'>'+list[index].MACHINE_NAME+'</option>';
@@ -296,7 +310,7 @@ class Allocation extends Main{
                 success: function(response){
                     response = JSON.parse(response);
 
-                    console.log(response.message);
+                    // console.log(response.message);
 
                     self.UpdateTableDisplay([response.message]);
 

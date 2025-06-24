@@ -72,8 +72,10 @@
     </div>
     <!-- JavaScript -->
     <script src="/<?php echo $rootFolder; ?>/script/Allocation.js?v=<?php echo $generateRandomNumber; ?>"></script>
+    <script src="/<?php echo $rootFolder; ?>/script/FixedAllocation.js?v=<?php echo $generateRandomNumber; ?>"></script>
     <script>
         let allocation = new Allocation();
+        let fixedAllocation = new FixedAllocation();
         let sessionStorageItem = "allocation-datetime";
 
         sessionStorage.setItem(sessionStorageItem, main.GetPhilippinesDateTime());
@@ -117,10 +119,20 @@
             $("#btnOut").hide();
 
             $("#modalAllocation").modal("show");
-            populateSelectForms();
+            
             $("#txtOperatorID").val(operatorID);
             $("#txtDisplayOperatorName").val(main.SetEmployeeName(operatorID));
             $("#modalTitleAllocation").text("SET STATUS");
+
+            fixedAllocation.FindOperatorFixedAllocation(operatorID, function(response){
+                // console.log(response);
+                if(response == null){
+                    populateSelectForms(0, 0);
+                } else {
+
+                    populateSelectForms(response.PROCESS, response.MACHINE_CODE);
+                }
+            });
         });
         $("#table-records").on("click", ".btnModify", function(){
             let id = $(this).val();
@@ -152,7 +164,15 @@
 
                     $("#hiddenAllocationID").val("");
 
-                    populateSelectForms();
+                    fixedAllocation.FindOperatorFixedAllocation(data.OPERATOR, function(response){
+                        // console.log(response);
+                        if(response == null){
+                            populateSelectForms(0, 0);
+                        } else {
+
+                            populateSelectForms(response.PROCESS, response.MACHINE_CODE);
+                        }
+                    });
 
                 } else {
                     // OUT
@@ -263,13 +283,20 @@
             allocation.UpdateInAllocation(allocation);
         });
 
-        function populateSelectForms(){
-            $("#formMachine").hide();
-            allocation.PopulateProcess($("#selectProcess"));
-            allocation.PopulateMachine($("#selectMachine"), 0);
+        function populateSelectForms(process, machine){
+            
             allocation.PopulateAttendanceStatus($("#selectAttendanceStatus"));
             allocation.PopulateShift($("#selectShift"));
             $("#txtRemarks").val("");
+            allocation.PopulateProcess($("#selectProcess"), process);
+            allocation.PopulateMachine($("#selectMachine"), process, machine);
+            
+
+            if(machine == 0){
+                $("#formMachine").hide();
+            } else {
+                $("#formMachine").show();
+            }
 
         }
         function displayTotalAttendance(){
@@ -280,7 +307,9 @@
         }
 
 
-        /*   */
+        /*
+        
+        */
 
 
     </script>

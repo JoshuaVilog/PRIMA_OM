@@ -57,7 +57,7 @@ class AllocationModel {
     
     public static function AllocationLogsRecords() {
         $db = DB::connectionODAS();
-        $sql = "SELECT `RID`, `OPERATOR`, `PROCESS`, `MACHINE_CODE`, `IN_DATETIME`, `IN_BY`, `OUT_DATETIME`, `OUT_BY`, `REMARKS` FROM `allocation_masterlist` WHERE COALESCE(DELETED_AT, '') = ''";
+        $sql = "SELECT `RID`, `OPERATOR`, `PROCESS`, `MACHINE_CODE`, `IN_DATETIME`, `IN_BY`, `OUT_DATETIME`, `OUT_BY`, `REMARKS` FROM `allocation_masterlist` WHERE COALESCE(DELETED_AT, '') = '' ORDER BY RID DESC";
         $result = $db->query($sql);
 
         $records = [];
@@ -163,6 +163,43 @@ class AllocationModel {
             $row = mysqli_fetch_assoc($result);
 
             return $row;
+        }
+    }
+    public static function GetAllocationRecordByDate($date){
+        $db = DB::connectionODAS();
+
+        $sql = "SELECT
+            attendance_masterlist.RID,
+            attendance_masterlist.OPERATOR,
+            attendance_masterlist.SHIFT,
+            attendance_masterlist.ATTENDANCE_STATUS,
+            allocation_masterlist.PROCESS,
+            allocation_masterlist.MACHINE_CODE,
+            allocation_masterlist.IN_DATETIME,
+            allocation_masterlist.IN_BY,
+            allocation_masterlist.OUT_DATETIME,
+            allocation_masterlist.OUT_BY,
+            allocation_masterlist.REMARKS
+        FROM
+            attendance_masterlist
+        LEFT JOIN allocation_masterlist ON attendance_masterlist.RID = allocation_masterlist.ATTENDANCE_ID
+        WHERE
+            DATE = '$date'
+            ORDER BY RID DESC
+        ";
+        $result = mysqli_query($db,$sql);
+
+        if(mysqli_num_rows($result) == 0){
+            return 0;
+        } else {
+            $records = [];
+            if ($result && $result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    $records[] = $row;
+                }
+            }
+
+            return $records;
         }
     }
     public static function UpdateOutAllocation($records){

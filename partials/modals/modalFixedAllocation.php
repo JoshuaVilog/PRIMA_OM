@@ -1,4 +1,4 @@
-<div id="modalAllocation" class="modal fade">
+<div id="modalFixedAllocation" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -23,7 +23,7 @@
                         </div>
                     </div>
                     <div class="col-sm-6 col-xs-12">
-                        <div class="form-group" id="formMachine" style="display:none;">
+                        <div class="form-group" id="formMachine" style="display: none; ">
                             <label>
                                 <strong>MACHINE:</strong>
                             </label>
@@ -31,7 +31,7 @@
                         </div>
                     </div>
                 </div>
-                <input type="hidden" id="hiddenAllocationID">
+                <input type="hidden" id="hiddenFixedAllocationID">
             </div>
             <div class="modal-footer">
                 <button class="btn btn-primary" id="btnSave">SAVE</button>

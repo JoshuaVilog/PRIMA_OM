@@ -31,16 +31,50 @@ class FixedAllocationModel {
 
             return $row;
         }
-        
     }
 
-    public static function UpdateFixedAllocation($record){
+    public static function InsertFixedAllocation($records){
         $db = DB::connectionODAS();
-        $sql = "";
+        $userCode = $_SESSION['USER_CODE'];
+
+        $operator = $db->real_escape_string($records->operator);
+        $process = $db->real_escape_string($records->process);
+        $machine = $db->real_escape_string($records->machine);
+
+        $sql = "INSERT INTO `fixed_allocation_masterlist`(
+            `RID`,
+            `OPERATOR`,
+            `PROCESS`,
+            `MACHINE_CODE`,
+            `ALLOCATE_STATUS`,
+            `CREATED_BY`
+        )
+        VALUES(
+            DEFAULT,
+            '$operator',
+            '$process',
+            '$machine',
+            '1',
+            '$userCode'
+        )";
         
         return $db->query($sql);
+    }
 
+    public static function UpdatePrevAllocation($allocationID){
+        $db = DB::connectionODAS();
+        $userCode = $_SESSION['USER_CODE'];
 
+        // $allocationID = $db->real_escape_string($records->allocationID);
+
+        $sql = "UPDATE
+            `fixed_allocation_masterlist`
+        SET
+            `ALLOCATE_STATUS` = 0
+        WHERE
+            `RID` = $allocationID";
+        
+        return $db->query($sql);
 
     }
 
