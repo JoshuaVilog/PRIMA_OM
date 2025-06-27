@@ -112,6 +112,7 @@
 
         displayTableRecord1(date);
         displayTotalAttendance(date);
+        displayTableRecord2(date);
     }, 1000);
 
     $("#txtDate").change(function(){
@@ -119,6 +120,7 @@
 
         displayTableRecord1(date);
         displayTotalAttendance(date);
+        displayTableRecord2(date);
     });
 
     function displayTableRecord1(date){
@@ -233,6 +235,65 @@
                 $("#tdTotalAbsent").text(absent);
                 $("#tdTotalRecorded").text(totalRecorded);
 
+            },
+            error: function(err){
+                console.log("Error:"+JSON.stringify(err));
+            },
+        });
+    }
+
+    
+
+    function displayTableRecord2(date){
+
+        $.ajax({
+            url: "php/controllers/Allocation/GetAllocationRecords2.php",
+            method: "POST",
+            data: {
+                date: date,
+            },
+            datatype: "json",
+            success: function(response){
+
+                // console.log(response);
+                var table2 = new Tabulator("#table-records2", {
+                    data: response.data,
+                    pagination: "local",
+                    paginationSize: 25,
+                    paginationSizeSelector: [25, 50, 100],
+                    page: 1,
+                    ajaxURL: "your_data_endpoint_here.json",
+                    layout: "fitDataFill",
+                    columns: [
+                        {title: "#", formatter: function(cell) {
+                            const row = cell.getRow();
+                            const table = row.getTable();
+                            const page = table.getPage(); // current page number
+                            const size = table.getPageSize(); // rows per page
+                            const rowIndex = row.getPosition(true); // position in data
+                            return ((page - 1) * size) + row.getPosition(true);
+                        }, },
+                        {title: "ID", field: "RID", headerFilter: "input", visible: false, },
+                        {title: "PROCESS", field: "PROCESS", headerSort: false, formatter: function(cell){
+                            let value = cell.getValue();
+
+                            return (value != 0 && value != null) ? main.SetProcessName(value) : "-";
+                        }, },
+                        {title: "MACHINE", field: "MACHINE", headerSort: false, formatter: function(cell){
+                            let value = cell.getValue();
+
+                            return (value != 0 && value != null) ? main.SetMachineName(value) : "-";
+                        },},
+                        {title: "OPERATOR", field: "OPERATOR", headerSort: false, formatter: function(cell){
+                            let value = cell.getValue();
+                            
+                            return (value != 0 && value != null) ? main.SetEmployeeName(value) : "-";
+                        }, },
+                        {title: "ACTION", field:"RID", width: 300, hozAlign: "left", frozen: true, headerSort: false, frozen:true, visible: false, formatter:function(cell){}},
+                    ],
+                });
+
+                
             },
             error: function(err){
                 console.log("Error:"+JSON.stringify(err));

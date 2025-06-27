@@ -190,7 +190,7 @@ class AllocationModel {
         $result = mysqli_query($db,$sql);
 
         if(mysqli_num_rows($result) == 0){
-            return 0;
+            return [];
         } else {
             $records = [];
             if ($result && $result->num_rows > 0) {

@@ -220,10 +220,10 @@
             } else if(process == "PROCESS"){
 
                 $("#formMachine").hide();
-                allocation.PopulateMachine($("#selectMachine"), 0);
+                allocation.PopulateMachine($("#selectMachine"), "");
             } else {
                 $("#formMachine").hide();
-                allocation.PopulateMachine($("#selectMachine"), 0);
+                allocation.PopulateMachine($("#selectMachine"), "");
             }
         });
         $("#btnSave").click(function(){

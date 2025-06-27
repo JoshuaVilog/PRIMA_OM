@@ -224,7 +224,7 @@ class Allocation extends Main{
         let options = '';
 
         if(processID == "0"){
-            options += '<option value="0">-</option>';
+            options += '<option value="">-</option>';
         } else {
             for(let index = 0; index < list.length; index++){
 

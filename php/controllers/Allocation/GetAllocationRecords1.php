@@ -12,6 +12,8 @@ $date = $_POST['date'];
 
 try {
     $records = AllocationModel::GetAllocationRecordByDate($date);
+
+    $records = ($records)? $records : [];
     
     echo json_encode(['status' => 'success', 'data' => $records]);
 } catch (Exception $e) {
