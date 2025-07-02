@@ -14,6 +14,8 @@ class Allocation extends Main{
     }
     /* 
 
+    
+
     */
 
     DisplayRecords(date, tableElem){
@@ -50,6 +52,7 @@ class Allocation extends Main{
                             const page = table.getPage(); // current page number
                             const size = table.getPageSize(); // rows per page
                             const rowIndex = row.getPosition(true); // position in data
+
                             return ((page - 1) * size) + row.getPosition(true);
                         },},
                         {title: "id", field:"id", visible: false, },
@@ -88,6 +91,9 @@ class Allocation extends Main{
             },
         });
     }
+    /* 
+    
+    */
     DisplayAllocationLogRecords(tableElem){
         let self = this;
 

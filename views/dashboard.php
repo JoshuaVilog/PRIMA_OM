@@ -135,9 +135,20 @@
             success: function(response){
 
                 // console.log(response);
+                let newData = response.data.map(function(value){
+                    return {
+                        "RID": value['RID'],
+                        "PROCESS": main.SetProcessName(value['PROCESS']),
+                        "MACHINE_CODE": main.SetMachineName(value['MACHINE_CODE']),
+                        "OPERATOR": main.SetEmployeeName(value['OPERATOR']),
+                        "ATTENDANCE_STATUS": main.SetAttendanceStatus(value['ATTENDANCE_STATUS']),
+                    }
+
+                });
+
 
                 var table1 = new Tabulator("#table-records1", {
-                    data: response.data,
+                    data: newData,
                     pagination: "local",
                     paginationSize: 25,
                     paginationSizeSelector: [25, 50, 100],
@@ -153,28 +164,16 @@
                             const rowIndex = row.getPosition(true); // position in data
                             return ((page - 1) * size) + row.getPosition(true);
                         }, },
-                        {title: "ID", field: "RID", headerFilter: "input", visible: false, },
-                        {title: "OPERATOR", field: "OPERATOR", headerSort: false, formatter: function(cell){
-                            let value = cell.getValue();
-                            
-                            return (value != 0 && value != null) ? main.SetEmployeeName(value) : "-";
-                        }, },
-                        {title: "PROCESS", field: "PROCESS", headerSort: false, formatter: function(cell){
+                        {title: "ID", field: "RID", headerFilter: "input", visible: false, headerFilter: "input",},
+                        {title: "OPERATOR", field: "OPERATOR", headerSort: false, headerFilter: "input",},
+                        {title: "PROCESS", field: "PROCESS", headerSort: false, headerFilter: "input",},
+                        {title: "MACHINE", field: "MACHINE_CODE", headerSort: false, headerFilter: "input",},
+                        {title: "STATUS", field: "ATTENDANCE_STATUS", headerSort: false, headerFilter: "input", formatter: function(cell){
                             let value = cell.getValue();
 
-                            return (value != 0 && value != null) ? main.SetProcessName(value) : "-";
-                        }, },
-                        {title: "MACHINE", field: "MACHINE_CODE", headerSort: false, formatter: function(cell){
-                            let value = cell.getValue();
+                            cell.getElement().style.backgroundColor = (value == "PRESENT")? "#C3FDB8":"#FF6347";
 
-                            return (value != 0 && value != null) ? main.SetMachineName(value) : "-";
-                        },},
-                        {title: "STATUS", field: "ATTENDANCE_STATUS", headerSort: false, formatter: function(cell){
-                            let value = cell.getValue();
-
-                            cell.getElement().style.backgroundColor = (value == 1)? "#C3FDB8":"#FF6347";
-
-                            return (value != 0) ? main.SetAttendanceStatus(value) : "-";
+                            return value;
                         },},
                         /* {title: "IN", field: "IN_DATETIME", headerSort: false, },
                         {title: "IN", field: "IN_BY", headerSort: false, formatter: function(cell){
@@ -227,7 +226,6 @@
                         }
 
                     }
-
                 }
 
                 $("#tdTotalOperator").text(data.length);
@@ -255,9 +253,19 @@
             datatype: "json",
             success: function(response){
 
+                let newData = response.data.map(function(value){
+                    return {
+                        "RID": value['RID'],
+                        "PROCESS": main.SetProcessName(value['PROCESS']),
+                        "MACHINE": main.SetMachineName(value['MACHINE']),
+                        "OPERATOR": main.SetEmployeeName(value['OPERATOR']),
+                    }
+
+                });
+                console.log(newData);
                 // console.log(response);
                 var table2 = new Tabulator("#table-records2", {
-                    data: response.data,
+                    data: newData,
                     pagination: "local",
                     paginationSize: 25,
                     paginationSizeSelector: [25, 50, 100],
@@ -274,20 +282,20 @@
                             return ((page - 1) * size) + row.getPosition(true);
                         }, },
                         {title: "ID", field: "RID", headerFilter: "input", visible: false, },
-                        {title: "PROCESS", field: "PROCESS", headerSort: false, formatter: function(cell){
+                        {title: "PROCESS", field: "PROCESS", headerSort: false, headerFilter: "input", formatter: function(cell){
                             let value = cell.getValue();
 
-                            return (value != 0 && value != null) ? main.SetProcessName(value) : "-";
+                            return (value != "") ? value : "-";
                         }, },
-                        {title: "MACHINE", field: "MACHINE", headerSort: false, formatter: function(cell){
+                        {title: "MACHINE", field: "MACHINE", headerSort: false, headerFilter: "input", formatter: function(cell){
                             let value = cell.getValue();
 
-                            return (value != 0 && value != null) ? main.SetMachineName(value) : "-";
+                            return (value != "") ? value : "-";
                         },},
-                        {title: "OPERATOR", field: "OPERATOR", headerSort: false, formatter: function(cell){
+                        {title: "OPERATOR", field: "OPERATOR", headerSort: false, headerFilter: "input", formatter: function(cell){
                             let value = cell.getValue();
                             
-                            return (value != 0 && value != null) ? main.SetEmployeeName(value) : "-";
+                            return (value != "") ? value : "-";
                         }, },
                         {title: "ACTION", field:"RID", width: 300, hozAlign: "left", frozen: true, headerSort: false, frozen:true, visible: false, formatter:function(cell){}},
                     ],

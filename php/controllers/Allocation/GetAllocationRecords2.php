@@ -9,6 +9,7 @@ header('Content-Type: application/json');
 
 $date = $_POST['date'];
 
+
 try {
     $records = AllocationModel::GetAllocationRecordByDate($date);
     $recordsProcessMachine = ProcessModel::DisplayProcessAndMachineRecords();

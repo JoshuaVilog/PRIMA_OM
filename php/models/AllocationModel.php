@@ -202,6 +202,7 @@ class AllocationModel {
             return $records;
         }
     }
+
     public static function UpdateOutAllocation($records){
         $db = DB::connectionODAS();
         $userCode = $_SESSION['USER_CODE'];
@@ -222,6 +223,60 @@ class AllocationModel {
                 `RID` = $allocationID";
                 
         return $db->query($sql);
+    }
+
+    public static function SelectOutAttendance($shift, $date){
+        $db = DB::connectionODAS();
+
+        if($shift == '1'){
+            //DAY SHIFT
+            $sql = "SELECT `RID`, `IN_DATETIME`, `IN_BY`, `OUT_DATETIME`, `OUT_BY` FROM `allocation_masterlist` WHERE IN_DATETIME < '$date 19:00:00' AND OUT_DATETIME IS NULL";
+        } else if($shift == '2'){
+            //NIGHT SHIFT
+            $sql = "SELECT `RID`, `IN_DATETIME`, `IN_BY`, `OUT_DATETIME`, `OUT_BY` FROM `allocation_masterlist` WHERE IN_DATETIME < '$date 07:00:00' AND OUT_DATETIME IS NULL";
+        }
+        
+        $result = $db->query($sql);
+
+        $records = [];
+        if ($result && $result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                
+                $records[] = $row;
+            }
+        }
+
+        return $records;
+    }
+
+    public static function AutomaticOutAttendance($shift, $date){
+        $db = DB::connectionODAS();
+
+        date_default_timezone_set('Asia/Manila');
+        $createdAt = date("Y-m-d H:i:s");
+
+        if($shift == '1'){
+            //DAY SHIFT
+            $sql = "UPDATE
+                `allocation_masterlist`
+            SET
+                `OUT_DATETIME` = '$createdAt',
+                `OUT_BY` = '1',
+                `UPDATED_BY` = '1'
+            WHERE IN_DATETIME < '$date 19:00:00' AND OUT_DATETIME IS NULL";
+        } else if($shift == '2'){
+            //NIGHT SHIFT
+            $sql = "UPDATE
+                `allocation_masterlist`
+            SET
+                `OUT_DATETIME` = '$createdAt',
+                `OUT_BY` = '1',
+                `UPDATED_BY` = '1'
+            WHERE IN_DATETIME < '$date 07:00:00' AND OUT_DATETIME IS NULL";
+        }
+                
+        return $db->query($sql);
+
     }
 
 }

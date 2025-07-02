@@ -26,7 +26,7 @@ class EmployeeModel {
     }
     public static function DisplayOperatorRecords() {
         $db = DB::connectionHRIS();
-        $sql = "SELECT EMPLOYEE_ID, RFID, EMPLOYEE_NAME, F_NAME, L_NAME, M_NAME, DEPARTMENT_ID, JOB_POSITION_ID FROM 1_hris.1_employee_masterlist_tb WHERE DEPARTMENT_ID = 8 AND JOB_POSITION_ID = 63  AND DELETED_STATUS = '0'";
+        $sql = "SELECT EMPLOYEE_ID, RFID, EMPLOYEE_NAME, F_NAME, L_NAME, M_NAME, DEPARTMENT_ID, JOB_POSITION_ID FROM 1_hris.1_employee_masterlist_tb WHERE (JOB_POSITION_ID = 56  OR JOB_POSITION_ID = 63)  AND DELETED_STATUS = '0'";
         $result = $db->query($sql);
 
         $records = [];

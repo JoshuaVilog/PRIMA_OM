@@ -54,7 +54,7 @@ class Main {
 
         let year = currentDate.getFullYear();
         let month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-indexed
-        let day = currentDate.getDate().toString().padStart(2, '0');
+        let day;
         // let formattedDate = `${year}-${month}-${day}`;
 
         // Determine shift
@@ -64,9 +64,9 @@ class Main {
             return "Nightshift";
         } */
         if (hour >= 7 && hour < 19) {
-            let day = currentDate.getDate().toString().padStart(2, '0');
+            day = currentDate.getDate().toString().padStart(2, '0');
         } else {
-            let day = currentDate.getDate().toString().padStart(2, '0') - 1;
+            day = currentDate.getDate().toString().padStart(2, '0') - 1;
         }
 
         return `${year}-${month}-${day}`
@@ -82,8 +82,10 @@ class Main {
 
         // Determine shift
         if (hour >= 7 && hour < 19) {
+            //DAYSHIFT
             return 1;
         } else {
+            //NIGHTSHIFT
             return 2;
         }
     }
