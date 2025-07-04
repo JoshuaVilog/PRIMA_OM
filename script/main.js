@@ -55,18 +55,11 @@ class Main {
         let year = currentDate.getFullYear();
         let month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-indexed
         let day;
-        // let formattedDate = `${year}-${month}-${day}`;
 
-        // Determine shift
-        /* if (hour >= 7 && hour < 19) {
-            return "Dayshift";
-        } else {
-            return "Nightshift";
-        } */
         if (hour >= 7 && hour < 19) {
             day = currentDate.getDate().toString().padStart(2, '0');
-        } else {
-            day = currentDate.getDate().toString().padStart(2, '0') - 1;
+        } else if(hour <= 7 || hour > 19){
+            day = (currentDate.getDate() - 1).toString().padStart(2, '0');
         }
 
         return `${year}-${month}-${day}`
@@ -198,11 +191,15 @@ class Main {
     }
     SetEmployeeName(id){
         let list = JSON.parse(localStorage.getItem(this.lsEmployeeList));
-        let result = list.find(element => element.EMPLOYEE_ID === id);
-            
-        return result ? result.EMPLOYEE_NAME: "";
-    }
+        
+        if(id == 1){
+            return "SYSTEM ADMIN"
+        } else {
+            let result = list.find(element => element.EMPLOYEE_ID === id);
 
+            return result ? result.EMPLOYEE_NAME: "";
+        }
+    }
 }
 
 

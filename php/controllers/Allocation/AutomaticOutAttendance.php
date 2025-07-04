@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $currentHour = (int)date("H"); // 24-hour format
         $datetime = date("Y-m-d H:i:s");
 
-        if($currentHour >= 19 && 7 >= $currentHour){
+        if($currentHour >= 19 || 7 >= $currentHour){
             //NIGHTSHIFT
             // echo "OUT DAYSHIFT ";
 
@@ -36,15 +36,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         // echo $date;
         $records = AllocationModel::SelectOutAttendance($shift, $date);
+        $updateDesc = "";
 
         if(count($records) > 0){
             //AUTOMATIC UPDATE
             AllocationModel::AutomaticOutAttendance($shift, $date);
 
-            echo json_encode(['status' => 'success', 'message' => 'Automatic Update Success. As of '.$datetime]);
+            $updateDesc = "Automatic Update Success. ";
         }
 
-        echo json_encode(['status' => 'success', 'message' => 'Search Attendance Done. '.count($records) ." searched records. As of ".$datetime]);
+        echo json_encode(['status' => 'success', 'message' => 'Search Attendance Done. '.count($records) ." searched records. ".$updateDesc."As of ".$datetime]);
     } catch (Exception $e){
         echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
     }
