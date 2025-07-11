@@ -1,5 +1,7 @@
 <?php
 session_start();
+header("Access-Control-Allow-Origin: *");
+
 class DB {
     private static $conn;
 
@@ -7,7 +9,7 @@ class DB {
         $hostname = "localhost";
         $username = "root";
         $password = "";
-        $database = "1_odas";
+        $database = "1_om";
 
         if (!self::$conn) {
             self::$conn = new mysqli($hostname, $username, $password, $database);

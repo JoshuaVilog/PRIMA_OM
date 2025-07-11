@@ -1,10 +1,11 @@
 
 class Main {
     constructor(){
-        this.systemLocalStorageTitle = "odas";
+        this.systemLocalStorageTitle = "om";
         this.lsProcessList = this.systemLocalStorageTitle +"-process-list";
         this.lsMachineList = this.systemLocalStorageTitle +"-machine-list";
         this.lsEmployeeList = this.systemLocalStorageTitle +"-employee-list";
+        this.lsPurposeList = this.systemLocalStorageTitle +"-purpose-list";
 
     }
     GetCurrentDate(){
@@ -157,6 +158,24 @@ class Main {
             },
         });
     }
+    GetPurposeRecords(){
+        let self = this;
+        $.ajax({
+            url: "php/controllers/Purpose/Records.php",
+            method: "POST",
+            data: {},
+            datatype: "json",
+            success: function(response){
+                // console.log(response);
+                let list = response.data;
+
+                localStorage.setItem(self.lsPurposeList, JSON.stringify(list));
+            },
+            error: function(err){
+                console.log("Error:"+JSON.stringify(err));
+            },
+        });
+    }
 
 
     SetShift(id){
@@ -200,6 +219,42 @@ class Main {
             return result ? result.EMPLOYEE_NAME: "";
         }
     }
+    SetEmployeeNameByRFID(id){
+        let list = JSON.parse(localStorage.getItem(this.lsEmployeeList));
+        
+        if(id == 1){
+            return "SYSTEM ADMIN"
+        } else {
+            let result = list.find(element => element.RFID === id);
+
+            return result ? result.EMPLOYEE_NAME: "";
+        }
+    }
+    SetPurpose(id){
+        let list = JSON.parse(localStorage.getItem(this.lsPurposeList));
+        let result = list.find(element => element.RID === id);
+            
+        return result ? result.PURPOSE_DESC: "";
+    }
+
+    GetDurationMinutes(IN, OUT) {
+        if(IN == null || OUT == null){
+            return 0;
+        } else {
+
+            // Parse the input strings into Date objects
+            const inDate = new Date(IN);
+            const outDate = new Date(OUT);
+            
+            // Calculate the difference in milliseconds
+            const diffMs = outDate - inDate;
+            
+            // Convert milliseconds to minutes
+            const diffMinutes = Math.floor(diffMs / 60000); // 1 minute = 60,000 ms
+            
+            return diffMinutes;
+        }
+    }
 }
 
 
@@ -208,4 +263,5 @@ let main = new Main()
 main.GetProcessList();
 main.GetMachineList();
 main.GetEmployeeRecords();
+main.GetPurposeRecords();
 
