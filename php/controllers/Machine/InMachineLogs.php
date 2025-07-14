@@ -16,7 +16,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $record->user = $user;
         $record->purpose = $purpose;
 
-        $checkLogs = MachineModel::InsertMachineLogHistory($record);
+        $isDuplicate = MachineModel::CheckDuplicate($record);
+
+        if($isDuplicate == false){
+
+            $checkLogs = MachineModel::InsertMachineLogHistory($record);
+        }
+
         
         echo json_encode(['status' => 'success', 'message' => '']);
     } catch (Exception $e){

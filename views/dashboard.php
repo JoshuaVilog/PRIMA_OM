@@ -56,7 +56,7 @@
 
     setInterval(() => {
         displayTableRecord();
-        console.log("Load Machine Logs");
+        // console.log("Load Machine Logs");
     }, 60000);
     
     function displayTableRecord(){
@@ -69,28 +69,31 @@
             },
             datatype: "json",
             success: function(response){
-                console.log(response);
+                // console.log(response);
 
                 let newData = response.data.map(function(value){
                     return {
                         "RID": value['RID'],
                         "MACHINE_CODE": value['MACHINE_CODE'],
+                        "DATE": main.GetDateOnly(value['IN_DATETIME']),
                         "IN_DATETIME": value['IN_DATETIME'],
                         "OUT_DATETIME": (value['OUT_DATETIME'] != null) ? value['OUT_DATETIME'] : "",
                         "DURATION": main.GetDurationMinutes(value['IN_DATETIME'], value['OUT_DATETIME']),
                         // "DURATION" : "",
                         "IN_BY": main.SetEmployeeNameByRFID(value['IN_BY']),
                         "OUT_BY": main.SetEmployeeNameByRFID(value['OUT_BY']),
+                        "JOB_TITLE": main.SetJobPosition(main.SetEmployeeJobPositionByRFID(value['IN_BY'])),
                         "PURPOSE": main.SetPurpose(value['PURPOSE']),
                     }
-
                 });
+
+                // console.log(newData);
                 
                 table = new Tabulator("#table-records", {
                     data: newData,
                     pagination: "local",
-                    paginationSize: 25,
-                    paginationSizeSelector: [25, 50, 100],
+                    paginationSize: 15,
+                    paginationSizeSelector: [15, 25, 50, 100],
                     page: 1,
                     ajaxURL: "your_data_endpoint_here.json",
                     layout: "fitDataFill",
@@ -106,19 +109,23 @@
                         {title: "ID", field: "RID", headerFilter: "input", visible: false, },
                         {title: "MACHINE", field: "MACHINE_CODE",  headerFilter: "input", },
                         {title: "PURPOSE", field: "PURPOSE",  headerFilter: "input", },
+                        {title: "DATE", field: "DATE", headerFilter: "input", },
                         {title: "TIME IN", field: "IN_DATETIME", headerFilter: "input", },
+                        {title: "TIME OUT", field: "OUT_DATETIME", headerFilter: "input", },
+                        {title: "DURATION", field: "DURATION", headerFilter: "input", bottomCalc:"sum"},
+                        {title: "JOB TITLE", field: "JOB_TITLE", headerFilter: "input", },
                         {title: "IN", field: "IN_BY",  headerFilter: "input", formatter: function(cell){
                             let value = cell.getValue();
                             
                             return (value != "") ? value : "-";
                         }, },
-                        {title: "TIME OUT", field: "OUT_DATETIME", headerFilter: "input", },
+                        
                         {title: "OUT", field: "OUT_BY", headerFilter: "input", formatter: function(cell){
                             let value = cell.getValue();
                             
                             return (value != "") ? value : "-";
                         }, },
-                        {title: "DURATION", field: "DURATION", headerFilter: "input", },
+                        
                         {title: "ACTION", field:"RID", width: 300, hozAlign: "left", frozen: true, headerSort: false, frozen:true, visible: false, formatter:function(cell){}},
                     ],
                 });

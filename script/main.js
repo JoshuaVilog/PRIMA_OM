@@ -5,6 +5,7 @@ class Main {
         this.lsProcessList = this.systemLocalStorageTitle +"-process-list";
         this.lsMachineList = this.systemLocalStorageTitle +"-machine-list";
         this.lsEmployeeList = this.systemLocalStorageTitle +"-employee-list";
+        this.lsJobPositionList = this.systemLocalStorageTitle +"-jobposition-list";
         this.lsPurposeList = this.systemLocalStorageTitle +"-purpose-list";
 
     }
@@ -43,6 +44,9 @@ class Main {
         const second = parts.find(p => p.type === "second").value;
     
         return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
+    }
+    GetDateOnly(datetime){
+        return datetime.split(' ')[0];
     }
     GetShiftDate(){
         // Get current time in Philippines (UTC+8)
@@ -143,7 +147,7 @@ class Main {
     GetEmployeeRecords(){
         let self = this;
         $.ajax({
-            url: "php/controllers/Allocation/EmployeeRecords.php",
+            url: "php/controllers/Employee/EmployeeRecords.php",
             method: "POST",
             data: {},
             datatype: "json",
@@ -152,6 +156,24 @@ class Main {
                 let list = response.data;
 
                 localStorage.setItem(self.lsEmployeeList, JSON.stringify(list));
+            },
+            error: function(err){
+                console.log("Error:"+JSON.stringify(err));
+            },
+        });
+    }
+    GetJobPositionRecords(){
+        let self = this;
+        $.ajax({
+            url: "php/controllers/Employee/JobPositionRecords.php",
+            method: "POST",
+            data: {},
+            datatype: "json",
+            success: function(response){
+                // console.log(response);
+                let list = response.data;
+
+                localStorage.setItem(self.lsJobPositionList, JSON.stringify(list));
             },
             error: function(err){
                 console.log("Error:"+JSON.stringify(err));
@@ -230,6 +252,24 @@ class Main {
             return result ? result.EMPLOYEE_NAME: "";
         }
     }
+    
+    SetEmployeeJobPositionByRFID(id){
+        let list = JSON.parse(localStorage.getItem(this.lsEmployeeList));
+        
+        if(id == 1){
+            return "SYSTEM ADMIN"
+        } else {
+            let result = list.find(element => element.RFID === id);
+
+            return result ? result.JOB_POSITION_ID: "";
+        }
+    }
+    SetJobPosition(id){
+        let list = JSON.parse(localStorage.getItem(this.lsJobPositionList));
+        let result = list.find(element => element.JOB_POSITION_ID === id);
+            
+        return result ? result.JOB_TITLE: "";
+    }
     SetPurpose(id){
         let list = JSON.parse(localStorage.getItem(this.lsPurposeList));
         let result = list.find(element => element.RID === id);
@@ -263,5 +303,6 @@ let main = new Main()
 main.GetProcessList();
 main.GetMachineList();
 main.GetEmployeeRecords();
+main.GetJobPositionRecords();
 main.GetPurposeRecords();
 

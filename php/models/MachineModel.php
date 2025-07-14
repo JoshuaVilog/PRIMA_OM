@@ -41,6 +41,25 @@ class MachineModel {
         return $rid;
     }
 
+    public static function CheckDuplicate($records){
+        $db = DB::connectionODAS();
+
+        $machine = $db->real_escape_string($records->machine);
+        $user = $db->real_escape_string($records->user);
+
+        $find = $machine."-".$user;
+        $sql = "SELECT RID FROM `machine_log_history` WHERE CONCAT(MACHINE_CODE, '-', IN_BY, COALESCE(OUT_BY, ''))  = '$find'";
+
+        if(mysqli_num_rows($result) != 0){
+            // DUPLICATE
+            return true;
+        } else {
+            return false;
+        }
+
+
+    }
+
     public static function InsertMachineLogHistory($records){
         $db = DB::connectionODAS();
         // $userCode = $_SESSION['USER_CODE'];
@@ -89,7 +108,7 @@ class MachineModel {
 
     public static function DisplayMachineLogsRecords() {
         $db = DB::connectionODAS();
-        $sql = "SELECT `RID`, `MACHINE_CODE`, `IN_DATETIME`, `IN_BY`, `OUT_DATETIME`, `OUT_BY`, `DURATION`, `PURPOSE`, `CREATED_AT`, `UPDATED_AT`, `REALTIME_ACTION` FROM `machine_log_history`";
+        $sql = "SELECT `RID`, `MACHINE_CODE`, `IN_DATETIME`, `IN_BY`, `OUT_DATETIME`, `OUT_BY`, `DURATION`, `PURPOSE`, `CREATED_AT`, `UPDATED_AT`, `REALTIME_ACTION` FROM `machine_log_history` ORDER BY RID DESC";
         $result = $db->query($sql);
 
         $records = [];
@@ -102,5 +121,6 @@ class MachineModel {
         return $records;
     }
 }
+
 
 ?>
