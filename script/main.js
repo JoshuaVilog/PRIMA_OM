@@ -278,10 +278,9 @@ class Main {
     }
 
     GetDurationMinutes(IN, OUT) {
-        if(IN == null || OUT == null){
+        if (IN == null || OUT == null) {
             return 0;
         } else {
-
             // Parse the input strings into Date objects
             const inDate = new Date(IN);
             const outDate = new Date(OUT);
@@ -289,10 +288,10 @@ class Main {
             // Calculate the difference in milliseconds
             const diffMs = outDate - inDate;
             
-            // Convert milliseconds to minutes
-            const diffMinutes = Math.floor(diffMs / 60000); // 1 minute = 60,000 ms
+            // Convert milliseconds to minutes (with decimals)
+            const diffMinutes = diffMs / 60000; // 1 minute = 60,000 ms
             
-            return diffMinutes;
+            return diffMinutes.toFixed(2);
         }
     }
 }

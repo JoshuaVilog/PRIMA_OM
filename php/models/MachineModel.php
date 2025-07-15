@@ -121,6 +121,20 @@ class MachineModel {
 
         return $records;
     }
+    public static function DisplayMachineLogsRecordsByDate($startDate, $endDate) {
+        $db = DB::connectionODAS();
+        $sql = "SELECT `RID`, `MACHINE_CODE`, `IN_DATETIME`, `IN_BY`, `OUT_DATETIME`, `OUT_BY`, `DURATION`, `PURPOSE`, `CREATED_AT`, `UPDATED_AT`, `REALTIME_ACTION` FROM `machine_log_history` WHERE CREATED_AT BETWEEN '$startDate 00:00:00' AND '$endDate 23:59:00' ORDER BY RID DESC";
+        $result = $db->query($sql);
+
+        $records = [];
+        if ($result && $result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $records[] = $row;
+            }
+        }
+
+        return $records;
+    }
 }
 
 
