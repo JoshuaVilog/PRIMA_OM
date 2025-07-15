@@ -49,6 +49,7 @@ class MachineModel {
 
         $find = $machine."-".$user;
         $sql = "SELECT RID FROM `machine_log_history` WHERE CONCAT(MACHINE_CODE, '-', IN_BY, COALESCE(OUT_BY, ''))  = '$find'";
+        $result = mysqli_query($db,$sql);
 
         if(mysqli_num_rows($result) != 0){
             // DUPLICATE
