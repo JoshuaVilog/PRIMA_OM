@@ -135,6 +135,20 @@ class MachineModel {
 
         return $records;
     }
+    public static function DisplayMachineLogsRecordsByUser($user) {
+        $db = DB::connectionODAS();
+        $sql = "SELECT `RID`, `MACHINE_CODE`, `IN_DATETIME`, `IN_BY`, `OUT_DATETIME`, `OUT_BY`, `DURATION`, `PURPOSE`, `CREATED_AT`, `UPDATED_AT`, `REALTIME_ACTION` FROM `machine_log_history` WHERE IN_BY = '$user' ORDER BY RID DESC";
+        $result = $db->query($sql);
+
+        $records = [];
+        if ($result && $result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $records[] = $row;
+            }
+        }
+
+        return $records;
+    }
 }
 
 
