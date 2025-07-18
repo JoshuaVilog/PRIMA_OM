@@ -21,7 +21,7 @@ try {
         $allocationAttendanceStatus = 0;
 
         foreach($recordsAllocation as $allocation){
-            if($operator['EMPLOYEE_ID'] == $allocation['OPERATOR']){
+            if($operator['RFID'] == $allocation['OPERATOR']){
 
                 $allocationID = $allocation['RID'];
                 $allocationShift = $allocation['SHIFT'];
@@ -30,8 +30,9 @@ try {
             }
         }
 
-        $newRow['id'] = $operator['EMPLOYEE_ID'];
+        $newRow['id'] = $operator['RFID'];
         $newRow['EMPLOYEE_ID'] = $operator['EMPLOYEE_ID'];
+        $newRow['RFID'] = $operator['RFID'];
         $newRow['EMPLOYEE_NAME'] = $operator['EMPLOYEE_NAME'];
         $newRow['ALLOCATION_ID'] = $allocationID;
         $newRow['SHIFT'] = $allocationShift;

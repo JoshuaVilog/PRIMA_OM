@@ -12,11 +12,6 @@ class Allocation extends Main{
         elemTotalRecorded.text(this.totalOperatorRecorded);
 
     }
-    /* 
-
-    
-
-    */
 
     DisplayRecords(date, tableElem){
         let self = this;
@@ -29,7 +24,7 @@ class Allocation extends Main{
             },
             datatype: "json",
             success: function(response){
-                // console.log(response);
+                console.log(response);
                 let totalNotRecorded = response.data.filter(function(x){return x.ALLOCATION_ID == 0}).length;
 
                 self.totalOperatorAttendance = response.data.length;
@@ -69,7 +64,7 @@ class Allocation extends Main{
                             let id = cell.getValue();
                             let rowData = cell.getRow().getData();
 
-                            let setStatus = '<button class="btn btn-success btn-minier btnSetStatus" value="'+rowData.EMPLOYEE_ID+'">Set Status</button>';
+                            let setStatus = '<button class="btn btn-success btn-minier btnSetStatus" value="'+rowData.RFID+'">Set Status</button>';
                             let modify = '<button class="btn btn-warning btn-minier btnModify" value="'+id+'">Modify</button>';
                             
                             if(id == 0){
@@ -185,7 +180,7 @@ class Allocation extends Main{
                         return {
                             "id": value['id'],
                             "EMPLOYEE_ID": value['EMPLOYEE_ID'],
-                            "EMPLOYEE_NAME": main.SetEmployeeName(value['EMPLOYEE_ID']),
+                            "EMPLOYEE_NAME": main.SetEmployeeNameByRFID(value['EMPLOYEE_ID']),
                             "ALLOCATION_ID": value['ALLOCATION_ID'],
                             "SHIFT": value['SHIFT'],
                             "ATTENDANCE_STATUS": value['ATTENDANCE_STATUS'],
@@ -404,6 +399,7 @@ class Allocation extends Main{
             data: {
                 attendanceID: allocation.attendanceID,
                 operator: allocation.operator,
+                date: allocation.date,
                 process: allocation.process,
                 machine: allocation.machine,
                 remarks: allocation.remarks,

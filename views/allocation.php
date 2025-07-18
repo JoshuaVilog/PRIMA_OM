@@ -17,9 +17,9 @@
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 pricing-box">
                             <div class="widget-box widget-color-orange" style="">
-                                <div class="widget-header">
+                                <!-- <div class="widget-header">
                                     <h5 class="widget-title bigger lighter">List</h5>
-                                </div>
+                                </div> -->
                                 <div class="widget-body">
                                     <div class="widget-main">
                                         <div class="row">
@@ -121,11 +121,12 @@
             $("#modalAllocation").modal("show");
             
             $("#txtOperatorID").val(operatorID);
-            $("#txtDisplayOperatorName").val(main.SetEmployeeName(operatorID));
+            $("#txtDisplayOperatorName").val(main.SetEmployeeNameByRFID(operatorID));
             $("#modalTitleAllocation").text("SET STATUS");
+            // console.log(operatorID);
 
             fixedAllocation.FindOperatorFixedAllocation(operatorID, function(response){
-                // console.log(response);
+                
                 if(response == null){
                     populateSelectForms(0, 0);
                 } else {
@@ -140,7 +141,7 @@
             // console.log(id);
             allocation.GetAttendanceRecord(id, function(data){
                 // console.log(data);
-                $("#txtDisplayOperatorName").val(main.SetEmployeeName(data.OPERATOR));
+                $("#txtDisplayOperatorName").val(main.SetEmployeeNameByRFID(data.OPERATOR));
                 $("#txtOperatorID").val(data.OPERATOR);
                 $("#txtDisplayShift").val(main.SetShift(data.SHIFT));
                 $("#txtDisplayAttendanceStatus").val(main.SetAttendanceStatus(data.ATTENDANCE_STATUS));

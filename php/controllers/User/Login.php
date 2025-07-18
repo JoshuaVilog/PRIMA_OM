@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo json_encode(['status' => 'incorrect', 'data' => "incorrect"]);
         } else {
             $status = $users['ACTIVE'];
-            $userID = $users['EMPLOYEE_ID'];
+            $userID = $users['RFID'];
             $userFLname = $users['EMPLOYEE_NAME'];
             $userRole = $users['ROLE'];
 

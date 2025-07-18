@@ -21,7 +21,7 @@ class FixedAllocationModel {
     }
     public static function FindOperatorFixedAllocation($operator){
         $db = DB::connectionODAS();
-        $sql = "SELECT `RID`, `OPERATOR`, `PROCESS`, `MACHINE_CODE` FROM `fixed_allocation_masterlist` WHERE OPERATOR = $operator AND ALLOCATE_STATUS = 1";
+        $sql = "SELECT `RID`, `OPERATOR`, `PROCESS`, `MACHINE_CODE` FROM `fixed_allocation_masterlist` WHERE OPERATOR = '$operator' AND ALLOCATE_STATUS = 1";
         $result = mysqli_query($db,$sql);
 
         if(mysqli_num_rows($result) == 0){

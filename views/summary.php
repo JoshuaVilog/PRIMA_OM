@@ -21,7 +21,7 @@
         <div class="main-content-inner">
             <div class="page-content">
                 <div class="page-header">
-                    <h1>Dashboard</h1>
+                    <h1>Summary</h1>
                 </div>
                 <div class="row">
                     <div class="col-xs-12 col-sm-3">

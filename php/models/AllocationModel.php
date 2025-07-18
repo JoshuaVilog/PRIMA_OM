@@ -6,7 +6,7 @@ class AllocationModel {
 
     public static function AllocationRecords($date) {
         $db = DB::connectionODAS();
-        $sql = "SELECT `RID`, `OPERATOR`, `SHIFT`, `ATTENDANCE_STATUS` FROM 1_odas.attendance_masterlist WHERE DATE = '$date'";
+        $sql = "SELECT `RID`, `OPERATOR`, `SHIFT`, `ATTENDANCE_STATUS` FROM 1_om.attendance_masterlist WHERE DATE = '$date'";
         $result = $db->query($sql);
 
         $records = [];
@@ -119,6 +119,7 @@ class AllocationModel {
         $userCode = $_SESSION['USER_CODE'];
 
         $attendanceID = $db->real_escape_string($records->attendanceID);
+        $date = $db->real_escape_string($records->date);
         $operator = $db->real_escape_string($records->operator);
         $process = $db->real_escape_string($records->process);
         $machine = $db->real_escape_string($records->machine);
@@ -130,6 +131,7 @@ class AllocationModel {
         $sql = "INSERT INTO `allocation_masterlist`(
             `RID`,
             `ATTENDANCE_ID`,
+            `DATE`,
             `OPERATOR`,
             `PROCESS`,
             `MACHINE_CODE`,
@@ -141,6 +143,7 @@ class AllocationModel {
         VALUES(
             DEFAULT,
             '$attendanceID',
+            '$date',
             '$operator',
             '$process',
             '$machine',

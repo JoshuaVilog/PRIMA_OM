@@ -22,7 +22,7 @@ try {
 
         foreach($recordsAllocation as $allocation){
 
-            if($operator['EMPLOYEE_ID'] == $allocation['OPERATOR']){
+            if($operator['RFID'] == $allocation['OPERATOR']){
 
                 $process = $allocation['PROCESS'];
                 $machineCode = $allocation['MACHINE_CODE'];
@@ -31,7 +31,7 @@ try {
         }
 
         $newRow['id'] = $operator['EMPLOYEE_ID'];
-        $newRow['OPERATOR'] = $operator['EMPLOYEE_ID'];
+        $newRow['OPERATOR'] = $operator['RFID'];
         $newRow['OPERATOR_NAME'] = $operator['EMPLOYEE_NAME'];
         $newRow['PROCESS'] = $process;
         $newRow['MACHINE_CODE'] = $machineCode;

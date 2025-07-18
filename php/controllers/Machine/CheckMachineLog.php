@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
 
-       $checkLogs = MachineModelssssssssssssssssss::CheckMachineLogs($machine, $user);
+       $checkLogs = MachineModel::CheckMachineLogs($machine, $user);
        $rid = 0;
 
         if($checkLogs == 0){

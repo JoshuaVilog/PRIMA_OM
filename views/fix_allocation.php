@@ -57,7 +57,7 @@
         $("#table-records").on("click", ".btnModifyRecord", function(){
             let value = $(this).val();
 
-            $("#txtDisplayOperatorName").val(main.SetEmployeeName(value));
+            $("#txtDisplayOperatorName").val(main.SetEmployeeNameByRFID(value));
             $("#txtOperatorID").val(value);
 
             fixedAllocation.FindOperatorFixedAllocation(value, function(response){

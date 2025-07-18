@@ -6,6 +6,7 @@ require_once __DIR__ . '/../../models/AllocationModel.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $operator = $_POST['operator'];
+    $date = $_POST['date'];
     $attendanceID = $_POST['attendanceID'];
     $process = $_POST['process'];
     $machine = $_POST['machine'];
@@ -15,6 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $record = new AllocationModel();
 
         $record->operator = $operator;
+        $record->date = $date;
         $record->process = $process;
         $record->machine = $machine;
         $record->remarks = $remarks;

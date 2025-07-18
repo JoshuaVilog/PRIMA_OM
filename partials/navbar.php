@@ -1,4 +1,5 @@
 <div id="navbar" class="navbar navbar-default ace-save-state" style="background-color:#00008b; height:25px;">
+    <!-- // ETO PALA ANG SALARIN KAYA NASISIRA ANG SIDEBAR KAPAG MOBILE, YUNG HEIGHT -->
     <div class="navbar-container ace-save-state" id="navbar-container">
         <button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
             <span class="sr-only">Toggle sidebar</span>
@@ -11,7 +12,7 @@
         </button>
 
         <div class="navbar-header pull-left">
-            <a href="index.html" class="navbar-brand">
+            <a href="dashboard" class="navbar-brand">
                 <small>
                     <?php echo $systemTitle; ?>
                 </small>
