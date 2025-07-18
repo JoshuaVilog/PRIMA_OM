@@ -53,6 +53,16 @@
                                             <button class="btn btn-success btn-sm" id="btnExport2">Export</button>
                                         </div>
                                     </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <div id="table-records3"></div>
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <div id="chart1"></div>
+                                        </div>
+                                    </div>
+                                    <hr>
                                     <div id="table-records2"></div>
                                 </div>
                             </div>

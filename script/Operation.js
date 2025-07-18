@@ -5,6 +5,7 @@ class Operation extends Main {
         super()
         this.table1 = null;
         this.table2 = null;
+        this.table3 = null;
 
     }
 
@@ -104,7 +105,7 @@ class Operation extends Main {
             },
             datatype: "json",
             success: function(response){
-                console.log(response);
+                // console.log(response);
                 let newData = response.data.map(function(value){
                     return {
                         "RID": value['RID'],
@@ -121,7 +122,10 @@ class Operation extends Main {
                     }
                 });
 
-                // console.log(newData);
+                console.log(newData);
+
+                self.DisplayTable3("", newData);
+                self.SetChart1("", newData);
                 
                 self.table2 = new Tabulator(tableElem, {
                     data: newData,
@@ -181,4 +185,82 @@ class Operation extends Main {
     }
 
 
+    DisplayTable3(tableElem, list){
+                
+        let map = {};
+
+        list.forEach(item => {
+            let user = item.IN_BY;
+            let duration = parseFloat(item.DURATION);
+
+            if (!map[user]) {
+                map[user] = 0;
+            }
+
+            map[user] += duration;
+        });
+
+        let result = Object.entries(map).map(([user, total]) => ({
+            USER: user,
+            TOTAL: total
+        }));
+
+        // console.log(result);
+        self.table3 = new Tabulator("#table-records3", {
+            data: result,
+            // pagination: "local",
+            // paginationSize: 10,
+            // paginationSizeSelector: [10, 25, 50, 100],
+            // page: 1,
+            // ajaxURL: "your_data_endpoint_here.json",
+            layout: "fitDataFill",
+            columns: [
+                {title: "USER", field: "USER", headerFilter: "input"},
+                {title: "TOTAL", field: "TOTAL", headerFilter: "input", formatter:function(cell){
+                    return cell.getValue().toFixed(2);
+                }},
+            ],
+        });
+        
+    }
+    SetChart1(chart, list){
+        
+        let machineMap = {};
+        
+        list.forEach(item => {
+            let machine = item.PURPOSE;
+            if (!machineMap[machine]) {
+                machineMap[machine] = 0;
+            }
+            machineMap[machine]++;
+        });
+        
+        let result = Object.entries(machineMap).map(([label, value]) => ({
+            label,
+            value
+        }));
+        
+
+        FusionCharts.ready(function() {
+            var myChart = new FusionCharts({
+                type: "pie2d",
+                renderAt: "chart1",
+                width: "100%",
+                height: "400",
+                dataFormat: "json",
+                dataSource: {
+                    chart: 
+                    {
+                        caption: "Total Category",
+                        subcaption: "",
+                        decimals: "1",
+                        theme: "fusion",
+                        showLegend: "1",
+                    },
+                    data: result,
+                }
+            }).render();
+        });
+    }
 }
+

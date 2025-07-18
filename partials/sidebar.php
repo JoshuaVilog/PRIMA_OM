@@ -12,7 +12,7 @@
 
             <b class="arrow"></b>
         </li>
-        <li class="" id="">
+        <!-- <li class="" id="">
             <a href="allocation">
                 <i class="menu-icon fa fa-folder"></i>
                 <span class="menu-text"> Allocation </span>
@@ -35,7 +35,7 @@
             </a>
 
             <b class="arrow"></b>
-        </li>
+        </li> -->
 
 
 

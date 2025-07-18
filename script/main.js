@@ -291,7 +291,7 @@ class Main {
             // Convert milliseconds to minutes (with decimals)
             const diffMinutes = diffMs / 60000; // 1 minute = 60,000 ms
             
-            return diffMinutes.toFixed(2);
+            return parseFloat(diffMinutes.toFixed(2));
         }
     }
 }
