@@ -31,6 +31,7 @@
                             </label>
                             <input type="date" id="txtDate" class="form-control">
                         </div>
+                        <i class="ace-icon fa fa-spinner fa-spin blue bigger-125" id="spinner"></i>
                     </div>
                 </div>
                 <div class="row">
@@ -62,10 +63,10 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-12 col-sm-6">
+                    <div class="col-xs-12 col-sm-5">
                         <div class="widget-box widget-color-orange">
                             <div class="widget-header">
-                                <h5 class="widget-title bigger lighter">List</h5>
+                                <h5 class="widget-title bigger lighter">ATTENDANCE</h5>
                             </div>
                             <div class="widget-body">
                                 <div class="widget-main">
@@ -74,10 +75,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-12 col-sm-6">
+                    <div class="col-xs-12 col-sm-7">
                         <div class="widget-box widget-color-orange">
                             <div class="widget-header">
-                                <h5 class="widget-title bigger lighter">List</h5>
+                                <h5 class="widget-title bigger lighter">ALLOCATION</h5>
                             </div>
                             <div class="widget-body">
                                 <div class="widget-main">
@@ -121,6 +122,8 @@
         displayTableRecord1(date);
         displayTotalAttendance(date);
         displayTableRecord2(date);
+
+        $("#spinner").show();
     });
 
     function displayTableRecord1(date){
@@ -138,9 +141,9 @@
                 let newData = response.data.map(function(value){
                     return {
                         "RID": value['RID'],
-                        "PROCESS": main.SetProcessName(value['PROCESS']),
-                        "MACHINE_CODE": main.SetMachineName(value['MACHINE_CODE']),
-                        "OPERATOR": main.SetEmployeeName(value['OPERATOR']),
+                        // "PROCESS": main.SetProcessName(value['PROCESS']),
+                        // "MACHINE_CODE": main.SetMachineName(value['MACHINE_CODE']),
+                        "OPERATOR": main.SetEmployeeNameByRFID(value['OPERATOR']),
                         "ATTENDANCE_STATUS": main.SetAttendanceStatus(value['ATTENDANCE_STATUS']),
                     }
 
@@ -166,8 +169,8 @@
                         }, },
                         {title: "ID", field: "RID", headerFilter: "input", visible: false, headerFilter: "input",},
                         {title: "OPERATOR", field: "OPERATOR", headerSort: false, headerFilter: "input",},
-                        {title: "PROCESS", field: "PROCESS", headerSort: false, headerFilter: "input",},
-                        {title: "MACHINE", field: "MACHINE_CODE", headerSort: false, headerFilter: "input",},
+                        // {title: "PROCESS", field: "PROCESS", headerSort: false, headerFilter: "input",},
+                        // {title: "MACHINE", field: "MACHINE_CODE", headerSort: false, headerFilter: "input",},
                         {title: "STATUS", field: "ATTENDANCE_STATUS", headerSort: false, headerFilter: "input", formatter: function(cell){
                             let value = cell.getValue();
 
@@ -175,22 +178,10 @@
 
                             return value;
                         },},
-                        /* {title: "IN", field: "IN_DATETIME", headerSort: false, },
-                        {title: "IN", field: "IN_BY", headerSort: false, formatter: function(cell){
-                            let value = cell.getValue();
-
-                            return (value != 0) ? main.SetEmployeeName(value) : "-";
-                        },},
-                        {title: "OUT", field: "OUT_DATETIME", headerSort: false, },
-                        {title: "OUT", field: "OUT_BY", headerSort: false, formatter: function(cell){
-                            let value = cell.getValue();
-
-                            return (value != 0) ? main.SetEmployeeName(value) : "-";
-                        },},
-                        {title: "REMARKS", field: "REMARKS", headerSort: false,  },
-                        {title: "ACTION", field:"RID", width: 300, hozAlign: "left", frozen: true, headerSort: false, frozen:true, visible: false, formatter:function(cell){}}, */
                     ],
                 });
+
+                $("#spinner").hide();
             },
             error: function(err){
                 console.log("Error:"+JSON.stringify(err));
@@ -252,13 +243,14 @@
             },
             datatype: "json",
             success: function(response){
+                // console.log(response);
 
                 let newData = response.data.map(function(value){
                     return {
                         "RID": value['RID'],
                         "PROCESS": main.SetProcessName(value['PROCESS']),
                         "MACHINE": main.SetMachineName(value['MACHINE']),
-                        "OPERATOR": main.SetEmployeeName(value['OPERATOR']),
+                        "OPERATOR": main.SetEmployeeNameByRFID(value['OPERATOR']),
                     }
 
                 });

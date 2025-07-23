@@ -11,7 +11,7 @@ header('Content-Type: application/json');
 $date = $_POST['date'];
 
 try {
-    $records = AllocationModel::GetAllocationRecordByDate($date);
+    $records = AllocationModel::GetAttendanceRecordByDate($date);
 
     $records = ($records)? $records : [];
     

@@ -244,7 +244,7 @@ class Main {
     SetEmployeeNameByRFID(id){
         let list = JSON.parse(localStorage.getItem(this.lsEmployeeList));
         
-        if(id == 1){
+        if(id == 1 || id == 'ADMIN'){
             return "SYSTEM ADMIN"
         } else {
             let result = list.find(element => element.RFID === id);

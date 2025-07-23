@@ -28,7 +28,7 @@
                                                     <label>
                                                         <strong>SELECT DATE:</strong>
                                                     </label>
-                                                    <input type="date" id="txtDate" class="form-control">
+                                                    <input type="date" id="txtDate" class="form-control input-lg">
                                                 </div>
                                             </div>
                                             <div class="col-sm-6 col-xs-12"></div>
@@ -37,7 +37,7 @@
                                                     <label>
                                                         <strong>TOTAL OPERATOR ATTENDANCE:</strong>
                                                     </label>
-                                                    <label for="">
+                                                    <label>
                                                         <span id="spanTotalOperatorAttendance">-</span>
                                                     </label>
                                                     <br>

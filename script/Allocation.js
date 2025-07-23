@@ -52,7 +52,9 @@ class Allocation extends Main{
                         },},
                         {title: "id", field:"id", visible: false, },
                         {title: "ID", field: "ALLOCATION_ID", headerFilter: "input", visible: false, },
-                        {title: "OPERATOR", field: "EMPLOYEE_NAME", headerFilter: "input", resizable: false,},
+                        {title: "OPERATOR", field: "EMPLOYEE_NAME", headerFilter: "input", resizable: false, formatter: function(cell){
+                            return '<strong>'+ cell.getValue() +'</strong>';
+                        }},
                         {title: "SHIFT", field: "SHIFT", formatter: function(cell){
 
                             return (cell.getValue() != 0) ? main.SetShift(cell.getValue()) : "-";
@@ -68,10 +70,11 @@ class Allocation extends Main{
                             let modify = '<button class="btn btn-warning btn-minier btnModify" value="'+id+'">Modify</button>';
                             
                             if(id == 0){
+                                // IF NO STATUS YET
                                 return setStatus;
                             } else {
                                 if(rowData.ATTENDANCE_STATUS == "1"){
-
+                                    // IF PRESENT
                                     return modify;
                                 } else {
                                     return "-";
@@ -99,10 +102,22 @@ class Allocation extends Main{
             datatype: "json",
             success: function(response){
 
-                // console.log(response);
+                console.log(response.data);
+                let newData = response.data.map(function(value){
+                    return {
+                        "RID": value['RID'],
+                        "IN_DATETIME": value['IN_DATETIME'],
+                        "OUT_DATETIME": value['OUT_DATETIME'],
+                        "PROCESS": main.SetProcessName(value['PROCESS']),
+                        "MACHINE": main.SetMachineName(value['MACHINE_CODE']),
+                        "OPERATOR": main.SetEmployeeNameByRFID(value['OPERATOR']),
+                        "IN_BY": (value['IN_BY'] != '') ? main.SetEmployeeNameByRFID(value['IN_BY']) : '',
+                        "OUT_BY": (value['OUT_BY'] != '') ? main.SetEmployeeNameByRFID(value['OUT_BY']) :'',
+                    }
+                });
 
                 self.tableDisplayAllocationLogs = new Tabulator(tableElem, {
-                    data: response.data,
+                    data: newData,
                     pagination: "local",
                     paginationSize: 25,
                     paginationSizeSelector: [25, 50, 100],
@@ -119,32 +134,20 @@ class Allocation extends Main{
                             return ((page - 1) * size) + row.getPosition(true);
                         }, },
                         {title: "ID", field: "RID", headerFilter: "input", visible: false, },
-                        {title: "OPERATOR", field: "OPERATOR", headerSort: false, formatter: function(cell){
-                            let value = cell.getValue();
-                            
-                            return (value != 0) ? main.SetEmployeeName(value) : "-";
-                        }, },
-                        {title: "PROCESS", field: "PROCESS", headerSort: false, formatter: function(cell){
-                            let value = cell.getValue();
-
-                            return (value != 0) ? main.SetProcessName(value) : "-";
-                        }, },
-                        {title: "MACHINE", field: "MACHINE_CODE", headerSort: false, formatter: function(cell){
-                            let value = cell.getValue();
-
-                            return (value != 0) ? main.SetMachineName(value) : "-";
-                        },},
+                        {title: "OPERATOR", field: "OPERATOR", headerSort: false, headerFilter: "input", },
+                        {title: "PROCESS", field: "PROCESS", headerSort: false, headerFilter: "input", },
+                        {title: "MACHINE", field: "MACHINE", headerSort: false, headerFilter: "input",},
                         {title: "IN", field: "IN_DATETIME", headerSort: false, },
-                        {title: "IN", field: "IN_BY", headerSort: false, formatter: function(cell){
+                        {title: "IN", field: "IN_BY", headerSort: false, headerFilter: "input", formatter: function(cell){
                             let value = cell.getValue();
 
-                            return (value != 0) ? main.SetEmployeeName(value) : "-";
+                            return (value != '') ? value : "-";
                         },},
                         {title: "OUT", field: "OUT_DATETIME", headerSort: false, },
                         {title: "OUT", field: "OUT_BY", headerSort: false, formatter: function(cell){
                             let value = cell.getValue();
 
-                            return (value != 0) ? main.SetEmployeeName(value) : "-";
+                            return (value != '') ? value : "-";
                         },},
                         {title: "REMARKS", field: "REMARKS", headerSort: false,  },
                         {title: "ACTION", field:"RID", width: 300, hozAlign: "left", frozen: true, headerSort: false, frozen:true, visible: false, formatter:function(cell){}},

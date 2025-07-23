@@ -48,6 +48,7 @@ class Operation extends Main {
                     page: 1,
                     ajaxURL: "your_data_endpoint_here.json",
                     layout: "fitDataFill",
+                    placeholder: "-NO DATA-",
                     columns: [
                         {title: "#", formatter: function(cell) {
                             const row = cell.getRow();
@@ -81,10 +82,13 @@ class Operation extends Main {
                     ],
                 });
 
+
+                $("#spinner").hide();
                 
             },
             error: function(err){
                 console.log("Error:"+JSON.stringify(err));
+                $("#spinner").hide();
             },
         });
     }
@@ -135,6 +139,7 @@ class Operation extends Main {
                     page: 1,
                     ajaxURL: "your_data_endpoint_here.json",
                     layout: "fitDataFill",
+                    placeholder: "-NO DATA-",
                     groupBy: function(data){
 
                         return data.MACHINE_CODE
@@ -208,6 +213,7 @@ class Operation extends Main {
         // console.log(result);
         self.table3 = new Tabulator("#table-records3", {
             data: result,
+            placeholder: "-NO DATA-",
             // pagination: "local",
             // paginationSize: 10,
             // paginationSizeSelector: [10, 25, 50, 100],

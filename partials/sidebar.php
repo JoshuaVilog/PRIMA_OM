@@ -12,18 +12,26 @@
 
             <b class="arrow"></b>
         </li>
-        <!-- <li class="" id="">
-            <a href="allocation">
-                <i class="menu-icon fa fa-folder"></i>
-                <span class="menu-text"> Allocation </span>
+        <li class="" id="">
+            <a href="summary">
+            <i class="menu-icon fa fa-tachometer"></i>
+                <span class="menu-text"> Summary </span>
             </a>
 
             <b class="arrow"></b>
         </li>
         <li class="" id="">
             <a href="allocation_logs">
-                <i class="menu-icon fa fa-folder"></i>
+                <i class="menu-icon fa fa-tachometer"></i>
                 <span class="menu-text"> Allocation Logs </span>
+            </a>
+
+            <b class="arrow"></b>
+        </li>
+        <li class="" id="">
+            <a href="allocation">
+                <i class="menu-icon fa fa-folder"></i>
+                <span class="menu-text"> Allocation </span>
             </a>
 
             <b class="arrow"></b>
@@ -35,7 +43,7 @@
             </a>
 
             <b class="arrow"></b>
-        </li> -->
+        </li>
 
 
 

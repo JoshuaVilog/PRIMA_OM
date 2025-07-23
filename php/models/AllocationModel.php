@@ -168,10 +168,30 @@ class AllocationModel {
             return $row;
         }
     }
+    public static function GetAttendanceRecordByDate($date){
+        $db = DB::connectionODAS();
+
+        $sql = "SELECT `RID`, `OPERATOR`, `DATE`, `SHIFT`, `ATTENDANCE_STATUS`, `CREATED_AT`, `CREATED_BY` FROM `attendance_masterlist` WHERE DATE = '$date' ORDER BY RID DESC";
+        $result = mysqli_query($db,$sql);
+
+        if(mysqli_num_rows($result) == 0){
+            return [];
+        } else {
+            $records = [];
+            if ($result && $result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    $records[] = $row;
+                }
+            }
+
+            return $records;
+        }
+
+    }
     public static function GetAllocationRecordByDate($date){
         $db = DB::connectionODAS();
 
-        $sql = "SELECT
+        /* $sql = "SELECT
             attendance_masterlist.RID,
             attendance_masterlist.OPERATOR,
             attendance_masterlist.SHIFT,
@@ -189,7 +209,8 @@ class AllocationModel {
         WHERE
             DATE = '$date'
             ORDER BY RID DESC
-        ";
+        "; */
+        $sql = "SELECT `RID`, `ATTENDANCE_ID`, `DATE`, `OPERATOR`, `PROCESS`, `MACHINE_CODE`, `IN_DATETIME`, `IN_BY`, `OUT_DATETIME`, `OUT_BY`, `REMARKS` FROM `allocation_masterlist` WHERE DATE = '$date' ORDER BY RID DESC";
         $result = mysqli_query($db,$sql);
 
         if(mysqli_num_rows($result) == 0){
@@ -281,6 +302,10 @@ class AllocationModel {
         return $db->query($sql);
 
     }
+
+
+    // ========================================================================= //
+
 
 }
 

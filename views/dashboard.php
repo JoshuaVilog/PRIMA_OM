@@ -53,6 +53,7 @@
                                             <button class="btn btn-success btn-sm" id="btnExport2">Export</button>
                                         </div>
                                     </div>
+                                    <i class="ace-icon fa fa-spinner fa-spin blue bigger-125" id="spinner"></i>
                                     <hr>
                                     <div class="row">
                                         <div class="col-sm-4">
@@ -134,7 +135,7 @@
 
         $("#txtEndDate").prop("min", value);
         operation.DisplayTable2("#table-records2", value, endDate);
-
+        $("#spinner").show();
     });
     $("#txtEndDate").change(function(){
         let value = $(this).val();
@@ -142,7 +143,7 @@
 
         $("#txtStartDate").prop("max", value);
         operation.DisplayTable2("#table-records2", startDate, value);
-
+        $("#spinner").show();
     });
 
     $("#btnExport1").click(function(){
