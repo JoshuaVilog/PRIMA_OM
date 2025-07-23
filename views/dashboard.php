@@ -50,7 +50,7 @@
                                         </div>
                                         <div class="col-sm-6"></div>
                                         <div class="col-sm-2">
-                                            <button class="btn btn-success btn-sm" id="btnExport2">Export</button>
+                                           
                                         </div>
                                     </div>
                                     <i class="ace-icon fa fa-spinner fa-spin blue bigger-125" id="spinner"></i>
@@ -64,6 +64,7 @@
                                         </div>
                                     </div>
                                     <hr>
+                                    <button class="btn btn-success btn-sm" id="btnExport2">Export</button>
                                     <div id="table-records2"></div>
                                 </div>
                             </div>

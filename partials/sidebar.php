@@ -12,7 +12,7 @@
 
             <b class="arrow"></b>
         </li>
-        <li class="" id="">
+        <!-- <li class="" id="">
             <a href="summary">
             <i class="menu-icon fa fa-tachometer"></i>
                 <span class="menu-text"> Summary </span>
@@ -43,7 +43,7 @@
             </a>
 
             <b class="arrow"></b>
-        </li>
+        </li> -->
 
 
 

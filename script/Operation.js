@@ -177,6 +177,7 @@ class Operation extends Main {
                     ],
                 });
 
+                $("#spinner").hide();
 
             },
             error: function(err){
@@ -195,34 +196,29 @@ class Operation extends Main {
         let map = {};
 
         list.forEach(item => {
-            let user = item.IN_BY;
-            let duration = parseFloat(item.DURATION);
-
-            if (!map[user]) {
-                map[user] = 0;
+            const key = `${item.IN_BY}_${item.JOB_TITLE}`;
+            if (!map[key]) {
+                map[key] = {
+                    USER: item.IN_BY,
+                    JOB_TITLE: item.JOB_TITLE,
+                    TOTAL: 0
+                };
             }
-
-            map[user] += duration;
+            map[key].TOTAL += parseFloat(item.DURATION);
         });
 
-        let result = Object.entries(map).map(([user, total]) => ({
-            USER: user,
-            TOTAL: total
-        }));
+        let result = Object.values(map);
 
         // console.log(result);
         self.table3 = new Tabulator("#table-records3", {
             data: result,
             placeholder: "-NO DATA-",
-            // pagination: "local",
-            // paginationSize: 10,
-            // paginationSizeSelector: [10, 25, 50, 100],
-            // page: 1,
-            // ajaxURL: "your_data_endpoint_here.json",
             layout: "fitDataFill",
             columns: [
                 {title: "USER", field: "USER", headerFilter: "input"},
-                {title: "TOTAL", field: "TOTAL", headerFilter: "input", formatter:function(cell){
+                {title: "JOB TITLE", field: "JOB_TITLE", headerFilter: "input"},
+                {title: "DURATION", field: "TOTAL", headerFilter: "input", formatter:function(cell){
+                    cell.getElement().style.backgroundColor = "#ffffff";
                     return cell.getValue().toFixed(2);
                 }},
             ],
@@ -245,14 +241,13 @@ class Operation extends Main {
             label,
             value
         }));
-        
 
         FusionCharts.ready(function() {
             var myChart = new FusionCharts({
                 type: "pie2d",
                 renderAt: "chart1",
                 width: "100%",
-                height: "400",
+                height: "800",
                 dataFormat: "json",
                 dataSource: {
                     chart: 

@@ -24,7 +24,7 @@ class MachineModel {
 
         $find = $machine."-".$user;
         // $sql = "SELECT RID FROM machine_log_history WHERE MACHINE_CODE = '$machine' AND IN_BY = '$user' AND OUT_BY IS NULL";
-        $sql = "SELECT RID FROM machine_log_history WHERE CONCAT(MACHINE_CODE, '-', IN_BY, COALESCE(OUT_BY, ''))  = '$find'";
+        $sql = "SELECT RID, PURPOSE, REMARKS FROM machine_log_history WHERE CONCAT(MACHINE_CODE, '-', IN_BY, COALESCE(OUT_BY, ''))  = '$find'";
         $result = mysqli_query($db,$sql);
 
         $rid = 0;
@@ -33,7 +33,8 @@ class MachineModel {
             // IN
             $row = mysqli_fetch_assoc($result);
 
-            $rid = $row['RID'];
+            // $rid = $row['RID'];
+            $rid = $row;
         } else {
             
         }
@@ -68,6 +69,7 @@ class MachineModel {
         $machine = $db->real_escape_string($records->machine);
         $user = $db->real_escape_string($records->user);
         $purpose = $db->real_escape_string($records->purpose);
+        $remarks = $db->real_escape_string($records->remarks);
 
         date_default_timezone_set('Asia/Manila');
         $createdAt = date("Y-m-d H:i:s");
@@ -77,14 +79,16 @@ class MachineModel {
             `MACHINE_CODE`,
             `IN_DATETIME`,
             `IN_BY`,
-            `PURPOSE`
+            `PURPOSE`,
+            `REMARKS`
         )
         VALUES(
             DEFAULT,
             '$machine',
             '$createdAt',
             '$user',
-            '$purpose'
+            '$purpose',
+            '$remarks'
         )";
         return $db->query($sql);
     }
@@ -93,6 +97,7 @@ class MachineModel {
         $db = DB::connectionODAS();
         $user = $db->real_escape_string($records->user);
         $rid = $db->real_escape_string($records->rid);
+        $remarks = $db->real_escape_string($records->remarks);
 
         date_default_timezone_set('Asia/Manila');
         $createdAt = date("Y-m-d H:i:s");
@@ -101,7 +106,8 @@ class MachineModel {
             `machine_log_history`
         SET
             `OUT_DATETIME` = '$createdAt',
-            `OUT_BY` = '$user'
+            `OUT_BY` = '$user',
+            `REMARKS` = '$remarks'
         WHERE
             `RID` = $rid";
         return $db->query($sql);

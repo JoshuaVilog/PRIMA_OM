@@ -7,12 +7,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $user = $_POST['user'];
     $rid = $_POST['rid'];
+    $remarks = $_POST['remarks'];
 
     try {
         $record = new MachineModel();
 
         $record->user = $user;
         $record->rid = $rid;
+        $record->remarks = $remarks;
 
         $checkLogs = MachineModel::UpdateMachineLogHistory($record);
         

@@ -8,6 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $machine = $_POST['machine'];
     $user = $_POST['user'];
     $purpose = $_POST['purpose'];
+    $remarks = $_POST['remarks'];
 
     try {
         $record = new MachineModel();
@@ -15,6 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $record->machine = $machine;
         $record->user = $user;
         $record->purpose = $purpose;
+        $record->remarks = $remarks;
 
         $isDuplicate = MachineModel::CheckDuplicate($record);
 

@@ -285,8 +285,8 @@ class AllocationModel {
                 `allocation_masterlist`
             SET
                 `OUT_DATETIME` = '$createdAt',
-                `OUT_BY` = '1',
-                `UPDATED_BY` = '1'
+                `OUT_BY` = 'ADMIN',
+                `UPDATED_BY` = 'ADMIN'
             WHERE IN_DATETIME < '$date 19:00:00' AND OUT_DATETIME IS NULL";
         } else if($shift == '2'){
             //NIGHT SHIFT
@@ -294,8 +294,8 @@ class AllocationModel {
                 `allocation_masterlist`
             SET
                 `OUT_DATETIME` = '$createdAt',
-                `OUT_BY` = '1',
-                `UPDATED_BY` = '1'
+                `OUT_BY` = 'ADMIN',
+                `UPDATED_BY` = 'ADMIN'
             WHERE IN_DATETIME < '$date 07:00:00' AND OUT_DATETIME IS NULL";
         }
                 
