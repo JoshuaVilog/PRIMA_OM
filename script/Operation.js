@@ -247,7 +247,7 @@ class Operation extends Main {
                 type: "pie2d",
                 renderAt: "chart1",
                 width: "100%",
-                height: "800",
+                height: "900",
                 dataFormat: "json",
                 dataSource: {
                     chart: 

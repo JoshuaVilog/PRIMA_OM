@@ -128,7 +128,9 @@
 
         operation.DisplayTable1("#table-records")
         operation.DisplayTable2("#table-records2", startDate, endDate);
-    }, 60000);
+
+        $("#spinner").show();
+    }, 120000);
     
     $("#txtStartDate").change(function(){
         let value = $(this).val();
