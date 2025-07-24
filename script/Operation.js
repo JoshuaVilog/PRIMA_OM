@@ -9,6 +9,7 @@ class Operation extends Main {
 
     }
 
+    // NAKA HIDE ITONG TABLE NA TO
     DisplayTable1(tableElem){
         let self = this;
 
@@ -97,9 +98,7 @@ class Operation extends Main {
         this.table1.download("xlsx", "Injection Machine Operation.xlsx", { sheetName: "Sheet1" });
     }
 
-    DisplayTable2(tableElem, startDate, endDate){
-        let self = this;
-
+    GetMachineLogsRecordsByDate(startDate, endDate, callback){
         $.ajax({
             url: "php/controllers/Machine/DisplayMachineLogsRecordsByDate.php",
             method: "POST",
@@ -109,7 +108,7 @@ class Operation extends Main {
             },
             datatype: "json",
             success: function(response){
-                // console.log(response);
+
                 let newData = response.data.map(function(value){
                     return {
                         "RID": value['RID'],
@@ -127,57 +126,7 @@ class Operation extends Main {
                 });
 
                 console.log(newData);
-
-                self.DisplayTable3("", newData);
-                self.SetChart1("", newData);
-                
-                self.table2 = new Tabulator(tableElem, {
-                    data: newData,
-                    pagination: "local",
-                    paginationSize: 50,
-                    paginationSizeSelector: [ 50, 100, 150],
-                    page: 1,
-                    ajaxURL: "your_data_endpoint_here.json",
-                    layout: "fitDataFill",
-                    placeholder: "-NO DATA-",
-                    groupBy: function(data){
-
-                        return data.MACHINE_CODE
-                    },
-                    columns: [
-                        /* {title: "#", formatter: function(cell) {
-                            const row = cell.getRow();
-                            const table = row.getTable();
-                            const page = table.getPage(); // current page number
-                            const size = table.getPageSize(); // rows per page
-                            const rowIndex = row.getPosition(true); // position in data
-                            return ((page - 1) * size) + row.getPosition(true);
-                        }, }, */
-                        {title: "ID", field: "RID", headerFilter: "input", visible: false, },
-                        {title: "MACHINE", field: "MACHINE_CODE",  headerFilter: "input", },
-                        {title: "PURPOSE", field: "PURPOSE",  headerFilter: "input", },
-                        {title: "DATE", field: "DATE", headerFilter: "input", },
-                        {title: "TIME IN", field: "IN_DATETIME", headerFilter: "input", },
-                        {title: "TIME OUT", field: "OUT_DATETIME", headerFilter: "input", },
-                        {title: "DURATION", field: "DURATION", headerFilter: "input", bottomCalc:"sum"},
-                        {title: "JOB TITLE", field: "JOB_TITLE", headerFilter: "input", },
-                        {title: "IN", field: "IN_BY",  headerFilter: "input", formatter: function(cell){
-                            let value = cell.getValue();
-                            
-                            return (value != "") ? value : "-";
-                        }, },
-                        
-                        {title: "OUT", field: "OUT_BY", headerFilter: "input", formatter: function(cell){
-                            let value = cell.getValue();
-                            
-                            return (value != "") ? value : "-";
-                        }, },
-                        
-                        {title: "ACTION", field:"RID", width: 300, hozAlign: "left", frozen: true, headerSort: false, frozen:true, visible: false, formatter:function(cell){}},
-                    ],
-                });
-
-                $("#spinner").hide();
+                callback(newData);
 
             },
             error: function(err){
@@ -185,13 +134,98 @@ class Operation extends Main {
             },
         });
     }
+
+    DisplayAll(startDate, endDate){
+        let self = this;
+        this.GetMachineLogsRecordsByDate(startDate, endDate, function(newData){
+
+
+            self.DisplayTable3(newData);
+            self.SetChart1(newData);
+            self.DisplayTable2("MACHINE", newData);
+
+            $("#spinner").hide();
+        });
+    }
+    DisplayMachineLogs(groupBy, startDate, endDate){
+        let self = this;
+
+        this.GetMachineLogsRecordsByDate(startDate, endDate, function(newData){
+
+            self.DisplayTable2(groupBy, newData)
+        });
+    }
+
+    DisplayTable2(groupBy, newData){
+        
+        this.table2 = new Tabulator("#table-records2", {
+            data: newData,
+            pagination: "local",
+            paginationSize: 50,
+            paginationSizeSelector: [ 50, 100, 150],
+            page: 1,
+            ajaxURL: "your_data_endpoint_here.json",
+            layout: "fitDataFill",
+            placeholder: "-NO DATA-",
+            groupBy: function(data){
+
+                if(groupBy == "MACHINE"){
+                    return data.MACHINE_CODE
+                } else if(groupBy == "PURPOSE"){
+                    return data.PURPOSE
+                } else if(groupBy == "USER"){
+                    return data.IN_BY
+                }
+
+                
+            },
+            columns: [
+                /* {title: "#", formatter: function(cell) {
+                    const row = cell.getRow();
+                    const table = row.getTable();
+                    const page = table.getPage(); // current page number
+                    const size = table.getPageSize(); // rows per page
+                    const rowIndex = row.getPosition(true); // position in data
+                    return ((page - 1) * size) + row.getPosition(true);
+                }, }, */
+                {title: "ID", field: "RID", headerFilter: "input", visible: false, },
+                {title: "MACHINE", field: "MACHINE_CODE",  headerFilter: "input", },
+                {title: "PURPOSE", field: "PURPOSE",  headerFilter: "input", },
+                {title: "DATE", field: "DATE", headerFilter: "input", },
+                {title: "TIME IN", field: "IN_DATETIME", headerFilter: "input", },
+                {title: "TIME OUT", field: "OUT_DATETIME", headerFilter: "input", },
+                {title: "DURATION", field: "DURATION", headerFilter: "input", bottomCalc:function(values, data, calcParams) {
+                    let total = values.reduce((sum, val) => sum + Number(val || 0), 0);
+                    return total.toFixed(2); // always shows 2 decimal places
+                }},
+                {title: "JOB TITLE", field: "JOB_TITLE", headerFilter: "input", },
+                {title: "IN", field: "IN_BY",  headerFilter: "input", formatter: function(cell){
+                    let value = cell.getValue();
+                    
+                    return (value != "") ? value : "-";
+                }, },
+                
+                {title: "OUT", field: "OUT_BY", headerFilter: "input", formatter: function(cell){
+                    let value = cell.getValue();
+                    
+                    return (value != "") ? value : "-";
+                }, },
+                
+                {title: "ACTION", field:"RID", width: 300, hozAlign: "left", frozen: true, headerSort: false, frozen:true, visible: false, formatter:function(cell){}},
+            ],
+        });
+
+        
+
+        
+    }
     ExportTable2(){
 
         this.table2.download("xlsx", "Injection Machine Operation.xlsx", { sheetName: "Sheet1" });
     }
 
 
-    DisplayTable3(tableElem, list){
+    DisplayTable3(list){
                 
         let map = {};
 
@@ -210,7 +244,7 @@ class Operation extends Main {
         let result = Object.values(map);
 
         // console.log(result);
-        self.table3 = new Tabulator("#table-records3", {
+        this.table3 = new Tabulator("#table-records3", {
             data: result,
             placeholder: "-NO DATA-",
             layout: "fitDataFill",
@@ -225,7 +259,7 @@ class Operation extends Main {
         });
         
     }
-    SetChart1(chart, list){
+    SetChart1(list){
         
         let machineMap = {};
         

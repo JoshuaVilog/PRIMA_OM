@@ -64,7 +64,25 @@
                                         </div>
                                     </div>
                                     <hr>
-                                    <button class="btn btn-success btn-sm" id="btnExport2">Export</button>
+                                    <div class="row">
+                                        <div class="col-sm-1">
+                                            <button class="btn btn-success btn-sm" id="btnExport2">Export</button>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <div class="form-group">
+                                                <label for="">
+                                                    <strong>GROUP BY:</strong>
+                                                </label>
+                                                <select id="selectGroupBy" class="form-control">
+                                                    <option value="MACHINE">BY MACHINE</option>
+                                                    <option value="PURPOSE">BY PURPOSE</option>
+                                                    <option value="USER">BY USER</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    
                                     <div id="table-records2"></div>
                                 </div>
                             </div>
@@ -118,11 +136,10 @@
         $("#txtStartDate").prop("max", startDate);
         $("#txtEndDate").prop("min", startDate);
 
-        operation.DisplayTable1("#table-records")
-        operation.DisplayTable2("#table-records2", startDate, endDate);
+        operation.DisplayAll(startDate, endDate)
     }, 500);
 
-    setInterval(() => {
+    /* setInterval(() => {
         let startDate = $("#txtStartDate").val();
         let endDate = $("#txtEndDate").val();
 
@@ -130,23 +147,25 @@
         operation.DisplayTable2("#table-records2", startDate, endDate);
 
         $("#spinner").show();
-    }, 120000);
+    }, 120000); */
     
     $("#txtStartDate").change(function(){
         let value = $(this).val();
         let endDate = $("#txtEndDate").val();
 
         $("#txtEndDate").prop("min", value);
-        operation.DisplayTable2("#table-records2", value, endDate);
+        operation.DisplayAll(value, endDate)
         $("#spinner").show();
+        $("#selectGroupBy").val("MACHINE");
     });
     $("#txtEndDate").change(function(){
         let value = $(this).val();
         let startDate = $("#txtStartDate").val();
 
         $("#txtStartDate").prop("max", value);
-        operation.DisplayTable2("#table-records2", startDate, value);
+        operation.DisplayAll(startDate, value)
         $("#spinner").show();
+        $("#selectGroupBy").val("MACHINE");
     });
 
     $("#btnExport1").click(function(){
@@ -156,4 +175,13 @@
     $("#btnExport2").click(function(){
         operation.ExportTable2();
     });
+
+    $("#selectGroupBy").change(function(){
+        let value = $(this).val();
+        let startDate = $("#txtStartDate").val();
+        let endDate = $("#txtEndDate").val();
+
+        operation.DisplayMachineLogs(value, startDate, endDate)
+
+    })
 </script>
