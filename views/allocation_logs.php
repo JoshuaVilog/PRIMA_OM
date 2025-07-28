@@ -45,7 +45,7 @@
     <!-- JavaScript -->
     <script src="/<?php echo $rootFolder; ?>/script/Allocation.js?v=<?php echo $generateRandomNumber; ?>"></script>
     <script>
-        
+        $("#menuAllocationLogs").addClass("active");
         let allocation = new Allocation();
 
         allocation.DisplayAllocationLogRecords("#table-records")

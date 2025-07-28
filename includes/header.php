@@ -85,6 +85,21 @@ include "config/path.php";
         /* ===================================================== */
         /* TYPE YOUR CODES HERE */
 
+        #span-brand-mobile {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+
+            #span-brand-web {
+                display: none;
+            }
+
+            #span-brand-mobile {
+                display: inline;
+            }
+        }
+
 
 
 

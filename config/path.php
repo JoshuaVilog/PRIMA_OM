@@ -3,6 +3,7 @@
 $rootFolder = "1_OM";
 $pluginFolder = "2_VILOG_ASSETS";
 $systemTitle = "OPERATION MANAGEMENT"; // ETO PALA ANG SALARIN KAYA NASISIRA ANG SIDEBAR KAPAG MOBILE
+$systemNameShortcut = "OM";
 $generateRandomNumber = rand(1000,9999);
 
 

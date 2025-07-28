@@ -124,6 +124,9 @@
 <!-- JavaScript -->
 <script src="/<?php echo $rootFolder; ?>/script/Operation.js?v=<?php echo $generateRandomNumber; ?>"></script>
 <script>
+
+    $("#menuDashboard").addClass("active");
+
     let operation = new Operation();
 
     $("#txtStartDate").val(main.GetCurrentDate());

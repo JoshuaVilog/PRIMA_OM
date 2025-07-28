@@ -74,6 +74,8 @@
     <script src="/<?php echo $rootFolder; ?>/script/Allocation.js?v=<?php echo $generateRandomNumber; ?>"></script>
     <script src="/<?php echo $rootFolder; ?>/script/FixedAllocation.js?v=<?php echo $generateRandomNumber; ?>"></script>
     <script>
+        $("#menuAllocation").addClass("active");
+
         let allocation = new Allocation();
         let fixedAllocation = new FixedAllocation();
         let sessionStorageItem = "allocation-datetime";

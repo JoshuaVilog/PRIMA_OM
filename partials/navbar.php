@@ -14,7 +14,8 @@
         <div class="navbar-header pull-left">
             <a href="dashboard" class="navbar-brand">
                 <small>
-                    <?php echo $systemTitle; ?>
+                    <span id="span-brand-web"><?php echo $systemTitle; ?></span>
+                    <span id="span-brand-mobile"><?php echo $systemNameShortcut; ?></span>
                 </small>
             </a>
         </div>

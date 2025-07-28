@@ -4,7 +4,7 @@ require_once __DIR__ . '/../../models/PurposeModel.php';
 header('Content-Type: application/json');
 
 try {
-    $records = RecordModel::DisplayRecords();
+    $records = PurposeModel::DisplayRecords();
     echo json_encode(['status' => 'success', 'data' => $records]);
 } catch (Exception $e) {
     echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);

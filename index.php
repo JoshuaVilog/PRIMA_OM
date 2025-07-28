@@ -3,7 +3,7 @@ session_start();
 
 $route = $_GET['route'] ?? 'login';
 
-$allowedRoutes = ['login', 'dashboard', 'allocation', 'record', 'logout', 'error', 'allocation_logs', 'fix_allocation', 'summary', 'automatic_out'];
+$allowedRoutes = ['login', 'dashboard', 'allocation', 'record', 'logout', 'error', 'allocation_logs', 'fix_allocation', 'summary', 'automatic_out', 'crud_machine', 'crud_purpose', ];
 
 if (!in_array($route, $allowedRoutes)) {
     http_response_code(404);

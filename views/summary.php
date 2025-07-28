@@ -106,6 +106,7 @@
 <!-- <script src="/<?php echo $rootFolder; ?>/script/FixedAllocation.js?v=<?php echo $generateRandomNumber; ?>"></script>
 <script src="/<?php echo $rootFolder; ?>/script/Allocation.js?v=<?php echo $generateRandomNumber; ?>"></script> -->
 <script>
+    $("#menuSummary").addClass("active");
     $("#txtDate").val(main.GetShiftDate());
 
     setTimeout(() => {

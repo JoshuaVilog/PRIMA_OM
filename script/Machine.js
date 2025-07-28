@@ -1,16 +1,16 @@
-class Record {
+class Machine {
     constructor(){}
 
     DisplayRecords(tableElem){
 
         $.ajax({
-            url: "php/controllers/Record/Records.php",
+            url: "php/controllers/Machine/Records.php",
             method: "POST",
             data: {},
             datatype: "json",
             success: function(response){
 
-                // console.log(response);
+                console.log(response);
 
                 var table = new Tabulator(tableElem, {
                     data: response.data,
@@ -22,14 +22,13 @@ class Record {
                     layout: "fitDataFill",
                     columns: [
                         {title: "ID", field: "RID", headerFilter: "input"},
-                        {title: "DESCRIPTION", field: "DESCRIPTION", headerFilter: "input"},
-                        {title: "CREATED AT", field: "CREATED_AT", headerFilter: "input"},
+                        {title: "LOCATION", field: "MACHINE_NAME", headerFilter: "input"},
                         {title: "ACTION", field:"RID", width: 300, hozAlign: "left", headerSort: false, frozen:true, formatter:function(cell){
                             let id = cell.getValue();
                             let edit = '<button class="btn btn-primary btn-minier btnEditRecord" value="'+id+'">Edit</button>';
                             let remove = '<button class="btn btn-danger btn-minier btnRemoveRecord" value="'+id+'">Remove</button>';
 
-                            return edit + " " + remove;
+                            return edit + ' ' + remove;
                         }},
                     ],
                 });
@@ -41,7 +40,7 @@ class Record {
     }
     SetRecord(record){
         $.ajax({
-            url: "php/controllers/Record/GetRecord.php",
+            url: "php/controllers/Machine/GetRecord.php",
             method: "POST",
             data: {
                 id: record.id,
@@ -50,7 +49,7 @@ class Record {
             success: function(data){
                 // console.log(data);
                 record.modal.modal("show");
-                record.desc.val(data.DESCRIPTION);
+                record.desc.val(data.MACHINE_NAME);
                 record.hiddenID.val(record.id);
 
                 if(record.btnAdd != undefined || record.btnCancel != undefined || record.btnUpdate != undefined){
@@ -77,7 +76,7 @@ class Record {
             })
         } else {
             $.ajax({
-                url: "php/controllers/Record/InsertRecord.php",
+                url: "php/controllers/Machine/InsertRecord.php",
                 method: "POST",
                 data: {
                     desc: desc.val(),
@@ -133,13 +132,14 @@ class Record {
             })
         } else {
             $.ajax({
-                url: "php/controllers/Record/UpdateRecord.php",
+                url: "php/controllers/Machine/UpdateRecord.php",
                 method: "POST",
                 data: {
                     desc: desc.val(),
                     id: id.val(),
                 },
                 success: function(response){
+                    console.log(response);
                     response = JSON.parse(response);
 
                     if(response.status == "duplicate"){
@@ -193,7 +193,7 @@ class Record {
           }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: 'php/controllers/Record/RemoveRecord.php', // Replace with your server-side script URL
+                    url: 'php/controllers/Machine/RemoveRecord.php', // Replace with your server-side script URL
                     type: 'POST',
                     data: {
                         id: record.id,

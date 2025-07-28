@@ -1,10 +1,10 @@
-class Record {
+class Purpose {
     constructor(){}
 
     DisplayRecords(tableElem){
 
         $.ajax({
-            url: "php/controllers/Record/Records.php",
+            url: "php/controllers/Purpose/Records.php",
             method: "POST",
             data: {},
             datatype: "json",
@@ -22,9 +22,9 @@ class Record {
                     layout: "fitDataFill",
                     columns: [
                         {title: "ID", field: "RID", headerFilter: "input"},
-                        {title: "DESCRIPTION", field: "DESCRIPTION", headerFilter: "input"},
+                        {title: "PURPOSE", field: "PURPOSE_DESC", headerFilter: "input"},
                         {title: "CREATED AT", field: "CREATED_AT", headerFilter: "input"},
-                        {title: "ACTION", field:"RID", width: 300, hozAlign: "left", headerSort: false, frozen:true, formatter:function(cell){
+                        {title: "ACTION", field:"RID", hozAlign: "left", headerSort: false, frozen:true, formatter:function(cell){
                             let id = cell.getValue();
                             let edit = '<button class="btn btn-primary btn-minier btnEditRecord" value="'+id+'">Edit</button>';
                             let remove = '<button class="btn btn-danger btn-minier btnRemoveRecord" value="'+id+'">Remove</button>';
@@ -41,7 +41,7 @@ class Record {
     }
     SetRecord(record){
         $.ajax({
-            url: "php/controllers/Record/GetRecord.php",
+            url: "php/controllers/Purpose/GetRecord.php",
             method: "POST",
             data: {
                 id: record.id,
@@ -50,7 +50,7 @@ class Record {
             success: function(data){
                 // console.log(data);
                 record.modal.modal("show");
-                record.desc.val(data.DESCRIPTION);
+                record.desc.val(data.PURPOSE_DESC);
                 record.hiddenID.val(record.id);
 
                 if(record.btnAdd != undefined || record.btnCancel != undefined || record.btnUpdate != undefined){
@@ -77,12 +77,13 @@ class Record {
             })
         } else {
             $.ajax({
-                url: "php/controllers/Record/InsertRecord.php",
+                url: "php/controllers/Purpose/InsertRecord.php",
                 method: "POST",
                 data: {
                     desc: desc.val(),
                 },
                 success: function(response){
+                    console.log(response);
                     response = JSON.parse(response);
 
                     if(response.status == "duplicate"){
@@ -133,7 +134,7 @@ class Record {
             })
         } else {
             $.ajax({
-                url: "php/controllers/Record/UpdateRecord.php",
+                url: "php/controllers/Purpose/UpdateRecord.php",
                 method: "POST",
                 data: {
                     desc: desc.val(),
@@ -193,7 +194,7 @@ class Record {
           }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: 'php/controllers/Record/RemoveRecord.php', // Replace with your server-side script URL
+                    url: 'php/controllers/Purpose/RemoveRecord.php', // Replace with your server-side script URL
                     type: 'POST',
                     data: {
                         id: record.id,
